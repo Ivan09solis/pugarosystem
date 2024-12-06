@@ -1,0 +1,10 @@
+{
+    "name": "cristineberja/pugarobrgysystem",
+    "description": "A web application for managing barangay system.",
+    "type": "project",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
