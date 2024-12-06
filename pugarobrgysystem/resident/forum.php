@@ -32,6 +32,15 @@ div.scroll {
     padding: 20px;
 }
 
+body {
+            background-image: url('../includes/logo/bg1.png');
+            background-size: cover;      
+            background-position: center;  
+            background-repeat: no-repeat; 
+            height: 100vh;               
+            margin: 0;                
+        }
+
 </style>
 
 
@@ -64,7 +73,7 @@ div.scroll {
                 <p class="fw-bold mt-2 mr-5">All Messages</p>
                 <?php if (mysqli_num_rows($forums) > 0) {
                     while ($row = $forums->fetch_assoc()) { ?>
-                        <div class="p-4 mb-5 rounded shadow flex-grow-1" style="position: relative;"> <!-- Set position relative for absolute positioning of button -->
+                        <div class="p-4 mb-5 bg-white rounded shadow flex-grow-1" style="position: relative;"> <!-- Set position relative for absolute positioning of button -->
                             <div class="info_section">
                                 <div class="event_header">
                                     <div class="d-flex align-items-center mb-2">

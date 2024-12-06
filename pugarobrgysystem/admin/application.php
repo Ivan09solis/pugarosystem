@@ -62,6 +62,15 @@ $all = mysqli_query($conn, $sql);
   color: #00214D;
   width: 150px;
 }
+
+body {
+        background-image: url('../includes/logo/bg3.gif');
+        background-size: cover;      
+        background-position: center;  
+        background-repeat: no-repeat; 
+        height: 100vh;               
+        margin: 0;                
+    }
 </style>
 
 

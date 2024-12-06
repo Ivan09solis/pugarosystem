@@ -17,6 +17,15 @@ $forums = mysqli_query($conn, $sql);
     background-color: white;
     box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.20);
 }
+
+body {
+        background-image: url('../includes/logo/bg3.gif');
+        background-size: cover;      
+        background-position: center;  
+        background-repeat: no-repeat; 
+        height: 100vh;               
+        margin: 0;                
+    }
 </style>
 
 
@@ -54,7 +63,7 @@ $forums = mysqli_query($conn, $sql);
 
                     // echo $forums.created_at;
                     while ($row = $forums->fetch_assoc()) { ?>
-                        <div class="p-4 mb-5 rounded shadow flex-grow-1" style="position: relative;"> <!-- Set position relative for absolute positioning of button -->
+                        <div class="p-4 mb-5 rounded bg-white shadow flex-grow-1" style="position: relative;"> <!-- Set position relative for absolute positioning of button -->
                             <div class="info_section">
                                 <div class="event_header">
                                     <div class="d-flex align-items-center mb-2">

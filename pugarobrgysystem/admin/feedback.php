@@ -12,6 +12,15 @@ $feedbacks = mysqli_query($conn, $sql);
     background-color: white;
     box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.20);
 }
+
+body {
+        background-image: url('../includes/logo/bg3.gif');
+        background-size: cover;      
+        background-position: center;  
+        background-repeat: no-repeat; 
+        height: 100vh;               
+        margin: 0;                
+    }
 </style>
 
 
@@ -33,7 +42,7 @@ $feedbacks = mysqli_query($conn, $sql);
             <?php if (mysqli_num_rows($feedbacks) > 0) {
                 while ($row = $feedbacks->fetch_assoc()) { ?>
 
-                    <div class="info_section shadow mt-3 rounded p-3 mb-4">
+                    <div class="info_section bg-white shadow mt-3 rounded p-3 mb-4">
                         <div class="event_header">
                             <div class="d-flex align-items-center mb-2 w-100">
                                 <img src="../includes/uploads/<?= $row['profile']; ?>" style="border: 2px solid #0dcaf0;" class="rounded-circle p-1 img-fluid" height="40" width="40"> 

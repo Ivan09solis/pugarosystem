@@ -49,6 +49,15 @@ include 'layout.php';
 .table tbody tr:hover {
     background-color: #f5f5f5;
 }
+
+body {
+        background-image: url('../includes/logo/bg3.gif');
+        background-size: cover;      
+        background-position: center;  
+        background-repeat: no-repeat; 
+        height: 100vh;               
+        margin: 0;                
+    }
 </style>
 
         <!-- Delete event Modal -->
@@ -90,7 +99,7 @@ include 'layout.php';
 
     <!-- event TABLE -->
     <div class="m-4 p-5">
-            <table class=" shadow rounded table mb-3 mt-3" id="table_id">
+            <table class=" shadow bg-white rounded table mb-3 mt-3" id="table_id">
                 <thead>
                     <tr>
                         <th>Title</th>

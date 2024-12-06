@@ -58,6 +58,15 @@ $announcement = mysqli_query($conn, $sql);
     display: none; /* Hide "see more" link initially */
 }
 
+body {
+            background-image: url('../includes/logo/bg1.png');
+            background-size: cover;      
+            background-position: center;  
+            background-repeat: no-repeat; 
+            height: 100vh;               
+            margin: 0;                
+        }
+
 
 </style>
 

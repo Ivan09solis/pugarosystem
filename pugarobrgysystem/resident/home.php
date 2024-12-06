@@ -15,66 +15,52 @@ require_once '../includes/include.php';
     background-color: white;
     box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.20);
 }
+
+body {
+            background-image: url('../includes/logo/bg1.png');
+            background-size: cover;      
+            background-position: center;  
+            background-repeat: no-repeat; 
+            height: 100vh;               
+            margin: 0;                
+        }
+
 </style>
 
 <body>
     <?php include('layout.php') ?>
+        <div class="container mt-5">
+            <div class="h1 fw-bold">Hello <?= $_SESSION['email'];?>,</div>
+            <!-- CONTENT -->
+            <div class=" mt-5">
+                <h2 class="mt-5 fw-bold">Recents's <i class="fa fa-history" aria-hidden="true"></i></h2>
 
-    <div class="container mt-5">
-
-        <div class="h1 fw-bold">Hello <?= $_SESSION['email'];?>,</div>
-
-
-        <!-- CONTENT -->
-        <div class=" mt-5">
-           <div class="row mt-6 ">
-            <div class="col-md-4">
-                <div class="card round-2 mb-3 shadow round" style="border-left: solid red;">
+                <div class="card round-2 mt-3 mb-3 shadow round" style="border-top: solid #00214D;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between ">
-                            <div class="h3">Resident's</div>
-                            <div class="h1"><i class="fa-solid fa-users"></i></div>
+                            <div class="h3">This is title </div>
+                            <div class="h6">xcvxcxf</div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <div class="display-4">
-                                    1
+                                <div>
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, soluta eum! Quo amet omnis architecto accusantium eos officiis, corporis atque quia commodi aliquid quod aperiam, excepturi non sed tempore nesciunt!</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-4">
-                <div class="card   round-2 mb-3 shadow  round"style="border-left: solid blue;">
+                <div class="card round-2 mt-3 mb-3 shadow round" style="border-top: solid #00214D;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between ">
-                            <div class="h3">Events</div>
-                            <div class="h1"><i class="fa fa-calendar" aria-hidden="true"></i></div>
+                            <div class="h3">This is title </div>
+                            <div class="h6">xcvxcxf</div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <div class="display-4">
-                                    2
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card   round-2 mb-3 shadow  round"style="border-left: solid green;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between ">
-                            <div class="h3">Applicants</div>
-                            <div class="h1"><i class="fa-solid fa-clipboard-list"></i></div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="display-4">
-                                    3
+                                <div>
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore, soluta eum! Quo amet omnis architecto accusantium eos officiis, corporis atque quia commodi aliquid quod aperiam, excepturi non sed tempore nesciunt!</p>
                                 </div>
                             </div>
                         </div>
@@ -82,13 +68,6 @@ require_once '../includes/include.php';
                 </div>
             </div>
         </div>
-
-
-        <h2 class="mt-5 fw-bold">Recents's <i class="fa fa-history" aria-hidden="true"></i></h2>
-
-
-
-    </div>
 </div>
 
 <script>
