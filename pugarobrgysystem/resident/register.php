@@ -9,75 +9,112 @@
     $resend = false;
     $_SESSION['modalshow'] = false;
     require_once('../sendmail.php');
+
     if (isset($_POST['register'])) {
+
+     
 
         $password = md5($_POST['password']);
         $conf_password = md5($_POST['confpassword']);
+
+        // CHECK IF PASSWORD AND CONFIRM PASSWORD MATCHED
+        if ($password != $conf_password) {
+            $_SESSION['status'] = "Password didn't matched";
+            $_SESSION['status_code'] = "error";
+            $_SESSION['message'] = "Please try again your password".
+            $float = true;
+
+            echo "dito sa comparepassword";
+        
+        } 
+
 
         $firstname = mysqli_real_escape_string($conn, $_POST['fname']);
         $middlename = mysqli_real_escape_string($conn, $_POST['mname']);
         $lastname = mysqli_real_escape_string($conn, $_POST['lname']);
         $gender = mysqli_real_escape_string($conn, $_POST['gender']);
         $birthdate = $_POST['bdate'];
-        $address = mysqli_real_escape_string($conn, $_POST['address']);
+        // $address = mysqli_real_escape_string($conn, $_POST['address']);
         $contact = mysqli_real_escape_string($conn, $_POST['contact']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $voterid = mysqli_real_escape_string($conn, $_POST['voterid']);
-        $profile = "default.jpg";
+        $profile = "default.jpg"; //DEFAULT PROFILE
 
 
+        // GET VARIABLE FOR OTP
         $_SESSION['firstname'] = $firstname;
         $_SESSION['middlename'] = $middlename;
         $_SESSION['lastname'] = $lastname;
         $_SESSION['regemail'] = $email;
 
+
+        // GENERATE OTP NUMBER
         $vkey = mt_rand(100000, 999999);
         $_SESSION['vkey'] = $vkey;
 
 
+
+        // CHECK IF VOTER'S ID EXIST
         $sql_voterid = "SELECT * FROM `resident` WHERE voterid = $voterid";
         $check_voterid = mysqli_query($conn, $sql_voterid);
         
+
+
+
+        // IF VOTERS ID DIDNT MATCH ANY
         if (mysqli_num_rows($check_voterid) == 0) {
             $_SESSION['status'] = "Invalid Voter's ID";
             $_SESSION['status_code'] = "error";
             $_SESSION['message'] = "Your Voter's ID doesn't exist."; 
             $float = true;
+            echo "dito sa voter is";
         }
         
 
+        // IF VOTERS ID MATCHED
         else {
+            
             $row = mysqli_fetch_assoc($check_voterid);
-            $Is4ps = $row['4ps'] === "4P'S" ? 1 : 0;
+            $Is4ps = $row['4ps'] === "4P'S" ? 1 : 0; //IF 4PS || NOT 
 
+            // CHECK IF EMAIL EXIST AND VERIFIED
             $sql_email = "SELECT email FROM `user` WHERE email = '$email' AND isVerified = 1";
             $check = mysqli_query($conn, $sql_email);
+            
 
-            if ($password != $conf_password) {
-                $_SESSION['status'] = "Password didn't matched";
-                $_SESSION['status_code'] = "error";
-                $_SESSION['message'] = "Please try again your password".
-                $float = true;
 
-            } elseif ($check->num_rows > 0) {
+            // CHECK IF EMAIL ALREADY EXIST
+            if ($check->num_rows > 0) {
                 $_SESSION['status'] = "Email already exist";
                 $_SESSION['status_code'] = "error";
                 $_SESSION['message'] = "This email already exist and verified.";
                 $float = true;
 
+                echo "dito sa email check";
 
-            } else {
-                $sql1 = "INSERT INTO user(`user_id`,`password`,`fname`,`mname`, `lname`, `gender`, `bdate`, `address`, `contact`, `email`,`vkey`,`profile`,`Is4ps`) VALUES (NULL, '$password','$firstname', '$middlename', '$lastname', '$gender', '$birthdate', '$address', '$contact', '$email', '$vkey', '$profile','$Is4ps')";
+            } 
+            //  SEND OTP THROUGH EMAIL
+            else {
+                
+                // INSERT TO DATABASE USER CREDENTIAL
+                $sql1 = "INSERT INTO user(`user_id`,`password`,`fname`,`mname`, `lname`, `gender`, `bdate`, `contact`, `email`,`vkey`,`profile`,`Is4ps`) VALUES (NULL, '$password','$firstname', '$middlename', '$lastname', '$gender', '$birthdate', '$contact', '$email', '$vkey', '$profile','$Is4ps')";
                 $run = mysqli_query($conn, $sql1);
-                if ($run == TRUE) {
-                    $_SESSION['modalshow'] = true;
+
+                if ($run) {
+                    echo $voterid;
+                    $_SESSION['modalshow'] = true; // SESSION FOR MODAL MODAL
                     $success = "Your code was sent to you via email " . $email . "";
                     $_SESSION['verefymessage'] = $success;
+
+
                     $a = "Pugaro Management System";
                     $b = "<html><body><p>Hi mam/sir $firstname $middlename $lastname. Good day! Thanks for registering your account in Pugaro Management. Your OTP cose is $vkey </a></p></body></html>";
                     $c = $email;
                     $d = $firstname . " " . $middlename . " " . $lastname;
-                    setData($a, $b, $c, $d);
+
+                    setData($a, $b, $c, $d); //
+
+
                 }
             }
         }
@@ -107,7 +144,6 @@
                 unset($_SESSION['middlename']);
                 unset($_SESSION['lastname']);
                 unset($_SESSION['regemail']);
-                unset($_SESSION['modalshow']);
 
                 if ($result != false && $result->num_rows > 0) {
                     $updateQuery = "UPDATE user SET isVerified = 1 WHERE vkey = '$code' LIMIT 1";
@@ -181,23 +217,14 @@ function myFunction() {
     </script>
 
     <style>
-        body{
-            background-color: #fbfcfc
-        }
+
+
         form {
             border-radius: 5px;
             background-color: blur;
         }
 
-        /*        input[type="email"], input[type="password"], input[type="text"] {
-            width: 100%;
-            height: 40px;
-            padding: 15px;
-            margin: 5px 0;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 12px;
-        }*/
+
         .register {
             color: white; 
             text-decoration: none; 
@@ -214,7 +241,6 @@ function myFunction() {
         }
 
         .full-height {
-            height: 100vh;
             z-index:2;
             position: relative;
         }
@@ -231,23 +257,41 @@ function myFunction() {
             height: 100%;
         }
 
-        .clip {
-            z-index: 1;
-            position: absolute;
-            height: 100vh;
-            width: 100%;
-            clip-path: polygon(0% 0%, 30% 0, 45% 50%, 30% 100%, 0% 100%);
-            background-color: #00214D;
-        }
+        body {
+    position: relative;
+    margin: 0;
+    height: 100%; 
+    overflow-x: hidden; 
+    background-image: url('../includes/logo/bg1.png');
+    background-size: cover;    
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
 
-            .clip2 {
-            z-index: 0;
-            position: absolute;
-            height: 100vh;
-            width: 100%;
-            clip-path: polygon(0% 0%, 35% 0, 47% 50%, 35% 100%, 0% 100%);
-            background-color: #55D1FF;
-        }
+    }
+
+
+
+
+    .clip {
+        z-index: 1;
+        position: fixed;  
+        height: 100vh;
+        width: 100%;
+        clip-path: polygon(0% 0%, 30% 0, 45% 50%, 35% 100%, 0% 100%);
+        background-color: #00214D;
+        top: 0;   
+    }
+
+    .clip2 {
+        z-index: 0;
+        position: fixed; 
+        height: 100vh;
+        width: 100%;
+        clip-path: polygon(0% 0%, 35% 0, 47% 50%, 40% 100%, 0% 100%);
+        background-color: #55D1FF;
+        top: 0;   
+    }
 
 
         .formlogin {
@@ -276,35 +320,49 @@ function myFunction() {
         a:hover{
             color: #00214D;  
         }
-        
-        body {
-            background-image: url('../includes/logo/bg1.png');
-            background-size: cover;      
-            background-position: center;  
-            background-repeat: no-repeat; 
-            height: 100vh;               
-            margin: 0;                
+        .title {
+        color: white !important;
+    }
+
+    @media (max-width: 1136px) {
+        .clip, .clip2 {
+            display: none;  
         }
+
+        .title {
+            color: #00214D !important;
+        }
+    }
+
+
+        
+  
 
     </style>
 
 </head>
 <body>
+
+
     <div class="clip"></div>
     <div class="clip2"></div>
-    <div class="container-fluid full-height  d-flex justify-content-center align-items-center">
-        <div class="container-fluid">
-            <div class="row  mt-5">
-                <div class="col-lg-5 col-md-6 col-sm-10 mx-auto">
-                    <center>
-                        <img src="../includes/logo/logo.gif" style="margin-top: 150px; margin-left: 168px;" height="150" width="150" class="shadow-lg rounded-circle">
-                    </center>
-                    <h2 class="fw-bold mt-4 text-light text-center mb-3" style=" margin-left: 168px;">
-                        PUGARO MANAGEMENT SYSTEM
-                    </h2>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-10 mx-auto">
 
+
+    <div class="container-fluid d-flex align-items-center justify-content-center full-height">
+        <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+            <div class="row h-100 w-100 p-5">
+                <div class="col-lg-6 col-md-12 col-sm-12 d-flex align-items-center justify-content-center">
+                    <div>
+                        <center>
+                            <img src="../includes/logo/logo.gif" height="150" width="150" class="shadow-lg rounded-circle">
+                        </center>
+                        <h2 class="fw-bold title mt-3 text-center mb-3">
+                            PUGARO MANAGEMENT SYSTEM
+                        </h2>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12  d-flex align-items-center justify-content-center">
+                    <div class="card p-4 rounded mb-5 w-100 opacity-75">
                         <h3 class="fw-bold p-3 mb-4" style="border-left: 3px solid #00214D; border-radius: 3px; color: black;">
                             REGISTER ACCOUNT
                         </h3>
@@ -355,12 +413,12 @@ function myFunction() {
                             </div>
 
 
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                                 <div class="form-group mb-3">
                                     <label for="username" class="mt-1 fw-bold" style="color: black;">ADDRESS :</label>
                                     <input type="text" id="address" name="address" placeholder="Pugaro Manaoag Pangasinan" class="form-control  p-3 shadow mb-4" required>
                                 </div>
-                            </div>
+                            </div> -->
 
 
                             <div class="col-md-4">
@@ -405,7 +463,7 @@ function myFunction() {
                         </form>
                             <div class="mt-4 h6 text-dark">Already have account ? <a href="login.php"><b>Login</b></a></div>
                         </center>
-
+                        </div>
                 </div>
             </div>
         </div>
@@ -465,7 +523,6 @@ function myFunction() {
 
     <?php
     if ($float) {
-        echo $float;
     ?>
         <script>
             Swal.fire({
@@ -477,7 +534,7 @@ function myFunction() {
         </script>
 
     <?php
-        unset($_SESSION['status']);
+        // unset($_SESSION['status']);
     }
     ?>
 
@@ -521,6 +578,8 @@ function myFunction() {
 </script>
 <?php if($_SESSION['modalshow']) { ?>
             <script>
+                console.log('dgfffdfhgf');
+                
                 var otpModal = new bootstrap.Modal(document.getElementById('otpmodal'));
                 otpModal.show();
             </script>

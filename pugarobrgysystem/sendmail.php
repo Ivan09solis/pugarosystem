@@ -13,20 +13,26 @@ function setData($subject, $body, $toEmail, $toName)
 
     try {
         // Server settings
+
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
+
         // Your Gmail credentials
         $mail->Username = 'pugaromanagementsystem@gmail.com';
         $mail->Password = 'bhelwroaouuhhzyi';
 
+
         // Sender and recipient settings
         $mail->setFrom('pugaromanagementsystem@gmail.com', 'Pugaro Management');
+
         $mail->addAddress($toEmail, $toName);
+        
         $mail->addReplyTo('pugaromanagementsystem@gmail.com', 'Pugaro Management'); // Set the reply-to address
+
 
         // Setting the email content
         $mail->isHTML(true);
