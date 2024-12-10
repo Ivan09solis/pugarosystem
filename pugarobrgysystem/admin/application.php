@@ -28,6 +28,13 @@ if (isset($_POST['cancelbtn'])) {
 $sql = "SELECT * FROM `forms` WHERE  `status` = 'Accepted' order by `form_id` DESC";
 $accepted = mysqli_query($conn, $sql);
 
+// QUERY FOR COMPLETED LIST
+$sql = "SELECT * FROM `forms` WHERE  `status` = 'Completed' order by `form_id` DESC";
+$completed = mysqli_query($conn, $sql);
+
+
+
+
 // QUERY FOR DECLINED LIST
 $sql = "SELECT * FROM `forms` WHERE  `status` = 'Declined' order by `form_id` DESC";
 $declined = mysqli_query($conn, $sql);
@@ -186,9 +193,10 @@ $(document).ready(function() {
    <div class=" mt-5">
     <div class="nav  nav-pills" id="nav-tab" role="tablist">
       <button class="nav-link active ms-auto p-3 m-1 shadow rounded fw-bold" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pending</button>
-      <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home2-tab" data-bs-toggle="tab" data-bs-target="#nav-home2" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">Accepted</button>
-      <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home3-tab" data-bs-toggle="tab" data-bs-target="#nav-home3" type="button" role="tab" aria-controls="nav-home3" aria-selected="false">Declined</button>
       <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home4-tab" data-bs-toggle="tab" data-bs-target="#nav-home4" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">Cancelled</button>
+      <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home3-tab" data-bs-toggle="tab" data-bs-target="#nav-home3" type="button" role="tab" aria-controls="nav-home3" aria-selected="false">Declined</button>
+      <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home2-tab" data-bs-toggle="tab" data-bs-target="#nav-home2" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">Accepted</button>
+      <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home2-tab" data-bs-toggle="tab" data-bs-target="#nav-home6" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">Completed</button>
       <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home2-tab" data-bs-toggle="tab" data-bs-target="#nav-home5" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">All</button>
   
     </div>
@@ -214,17 +222,17 @@ $(document).ready(function() {
                     <p class="mt-2"><strong>Status: </strong><span style="background-color: #cce5ff; color: #004085;" class=" shadow-sm p-2   rounded fw-bold"><?= $row['status'] ?></span></p>
                   </div>
                   <div class="text-end">
-                    <button data-bs-toggle="modal" data-bs-target="#Viewpending<?php echo $row['form_id'] ?>" class="btn mb-3 p-2 fw-bold shadow" style="width: 120px;">
-                      <i class="fa-solid fa-eye"></i> View
-                    </button>
-                    <br>
-                    <button data-bs-toggle="modal" name="acceptbtn" data-bs-target="#Accept<?= $row['form_id'] ?>" class="btn mb-3 p-2 shadow fw-bold btn-success" style="width: 120px;">
-                      <i class="fa-solid fa-circle-check"></i> Accept
-                    </button>                                                    
-                    <br>
-                    <button data-bs-toggle="modal" name="cancelbtn" data-bs-target="#Cancel<?= $row['form_id'] ?>" class="btn p-2 shadow fw-bold btn-danger" style="width: 120px;">
-                      <i class="fa-solid fa-circle-xmark"></i> Decline
-                    </button>
+                      <button data-bs-toggle="modal" data-bs-target="#Viewpending<?php echo $row['form_id'] ?>" class="btn mb-3 p-2 fw-bold shadow" style="width: 120px;">
+                        <i class="fa-solid fa-eye"></i> View
+                      </button>
+                      <br>
+                      <button data-bs-toggle="modal" name="acceptbtn" data-bs-target="#Accept<?= $row['form_id'] ?>" class="btn mb-3 p-2 shadow fw-bold btn-success" style="width: 120px;">
+                        <i class="fa-solid fa-circle-check"></i> Accept
+                      </button>                                                    
+                      <br>
+                      <button data-bs-toggle="modal" name="cancelbtn" data-bs-target="#Cancel<?= $row['form_id'] ?>" class="btn p-2 shadow fw-bold btn-danger" style="width: 120px;">
+                        <i class="fa-solid fa-circle-xmark"></i> Decline
+                      </button>
                   </div>    
 
                   <!-- VIEW PENDING MODAL -->
@@ -317,6 +325,7 @@ $(document).ready(function() {
                           <form action="../includes/functions.php" method="POST">
                            <center>
                              <p class="h5">Are you sure you want to decline this request?</p>
+                             <input type="hidden" name="location" class="location" id="location">
                              <input type="text" name="req_id" value="<?= $row['form_id'] ?>" class="form-control mb-3" hidden required>
                            </center> 
                          </div>
@@ -340,6 +349,7 @@ $(document).ready(function() {
                         <form action="../includes/functions.php" method="POST">
                          <center>
                           <p class="h5">Are you sure you want to accept this request?</p>
+                          <input type="hidden"  name="location2" class="location2" id="location2">
                           <input type="text" name="req_id" value="<?= $row['form_id'] ?>" class="form-control mb-3" hidden required>
                         </center> 
                       </div>
@@ -364,124 +374,282 @@ $(document).ready(function() {
     </div>
 
     <!-- ACCEPTED TABLE  -->
-    <div class="tab-pane mt-5 fade" id="nav-home2" role="tabpanel" aria-labelledby="nav-accept-tab" tabindex="0">
-      <h3 class="fw-bold">Accepted Status</h2>
-      <table class="shadow rounded dataTable mt-5 mb-3 mt-3" id="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Reference</th>
-            <th>Name</th>
-            <th>Purpose</th>
-            <th>Status</th>
-            <th>Created At</th>
-            <th>Updated At</th>
-            <th>View</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if (mysqli_num_rows($accepted) > 0) {
-            $count = 1;
-            while ($row = $accepted->fetch_assoc()) { ?>
-              <tr>
-                <td><?= $count ?></td>
-                <td><?= $row['ref'] ?></td>
-                <td><?= $row['fname'] ?> <?= $row['mname'] ?> <?= $row['lname'] ?></td>
-                <td><?= $row['purpose'] ?></td>
-                <td >
-                  <span style="background-color: #d4edda; color: #155724;" class=" shadow-sm p-2 m-5  rounded fw-bold">
-                    <?= $row['status'] ?>
-                  </span>
-                </td>
-                <td><?= $row['created_at'] ?></td>
-                <td><?= $row['updated_at'] ?></td>
-                <td><button data-bs-toggle="modal" data-bs-target="#Viewaccept<?php echo $row['form_id'] ?>" class="btn p-2 rounded-circle fw-bold text-light shadow-lg m-1" style="background-color: #00214D ;">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-              </td>
+    <div class="tab-pane  mt-5 fade" id="nav-home2" role="tabpanel" aria-labelledby="nav-accept-tab" tabindex="0">
+            <h3 class="fw-bold">Accepted Status</h2>
+            <table class="shadow rounded bg-white dataTable mt-5 mb-3 mt-3" id="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Reference</th>
+                  <th>Name</th>
+                  <th>Purpose</th>
+                  <th>Status</th>
+                  <th>Created At</th>
+                  <th>Updated At</th>
+                  <th>View</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (mysqli_num_rows($accepted) > 0) {
+                  $count = 1;
+                  while ($row = $accepted->fetch_assoc()) { ?>
+                    <tr>
+                      <td><?= $count ?></td>
+                      <td><?= $row['ref'] ?></td>
+                      <td><?= $row['fname'] ?> <?= $row['mname'] ?> <?= $row['lname'] ?></td>
+                      <td><?= $row['purpose'] ?></td>
+                      <td >
+                        <span style="background-color: #d4edda; color: #155724;" class=" shadow-sm p-2  rounded fw-bold">
+                          For Pickup 
+                        </span>
+                      </td>
+                      <td><?= $row['created_at'] ?></td>
+                      <td><?= $row['updated_at'] ?></td>
+                      <td><button data-bs-toggle="modal" data-bs-target="#Viewaccept<?php echo $row['form_id'] ?>" class="btn p-2 rounded-circle fw-bold text-light shadow-lg m-1" style="background-color: #00214D ;">
+                        <i class="fa-solid fa-eye"></i>
+                      </button>
+                      <button data-bs-toggle="modal" data-bs-target="#Completed<?php echo $row['form_id'] ?>" class="btn rounded-circle p-2 bg-success fw-bold text-white"><i class="fa-solid fa-circle-check"></i></button>
+                    </td>
+                  </tr>
+
+
+                  <!-- VIEW ACCEPTED MODAL -->
+                  <div class="modal fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">View File Request</h1>
+                        </div>
+                        <div class="modal-body p-4">
+                          <div class="row">
+                            <div class="col-md-6 col-sm-12 mb-3">
+                              <label class="fw-bold h6 mb-2 mt-2">Status :</label>
+                              <span class="alert w-100 rounded alert-success fw-bold p-2 shadow-sm mb-3">
+                                <?= $row['status'] ?>
+                              </span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 mb-3">
+                              <label class="fw-bold h6 mb-2 mt-2">Reference No. :</label>
+                              <span class="alert alert-info fw-bold shadow-sm p-2  mb-3">
+                                <?= $row['ref'] ?>
+                              </span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 mb-3">
+                              <label class="fw-bold h6 mt-2">Request Date :</label>
+                              <input type="text" name="birthdate" value="<?= date('d M Y', strtotime($row['created_at'])); ?>" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                              <label class="fw-bold h6 mt-2">Updated At</label>
+                              <input type="text" min="1" placeholder="20" value="<?= date('M d Y', strtotime($row['updated_at'])); ?>" name="age" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                              <label class="fw-bold h6 mt-2">Type of Request</label>
+                              <select name="formtype" class="form-control shadow-sm mb-3" disabled>
+                                <option value="" disabled>Select a request type</option>
+                                <option value="Barangay Clearance" <?= $row['formtype'] == 'Barangay Clearance' ? 'selected' : '' ?>>Barangay Clearance</option>
+                                <option value="Certificate of Indigency" <?= $row['formtype'] == 'Certificate of Indigency' ? 'selected' : '' ?>>Certificate of Indigency</option>
+                                <option value="Barangay Certificate" <?= $row['formtype'] == 'Barangay Certificate' ? 'selected' : '' ?>>Barangay Certificate</option>
+                              </select>
+                            </div>
+                            <div class="col-md-6 col-sm-12 mb-3">
+                              <label class="fw-bold h6 mt-2">Purpose</label>
+                              <input type="text" placeholder="E.g For work requirement" value="<?= $row['purpose'] ?>" name="purpose" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-3">
+                              <label class="fw-bold h6 mt-2">Firstname</label>
+                              <input type="text" placeholder="Juan" value="<?= $row['fname'] ?>" name="firstname" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                              <label class="fw-bold h6 mt-2">Middlename</label>
+                              <input type="text" placeholder="Cruz" value="<?= $row['mname'] ?>" name="middlename" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                              <label class="fw-bold h6 mt-2">Lastname</label>
+                              <input type="text" placeholder="Dela Cruz" value="<?= $row['lname'] ?>" name="lastname" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 col-sm-12 mb-3">
+                              <label class="fw-bold h6 mt-2">Birthdate</label>
+                              <input type="date" name="birthdate" value="<?= $row['bdate'] ?>" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                              <label class="fw-bold h6 mt-2">Age</label>
+                              <input type="number" min="1" placeholder="20" value="<?= $row['age'] ?>" name="age" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-3">
+                              <label class="fw-bold h6 mt-2">Address</label>
+                              <input type="text" placeholder="Pugaro Manaoag Pangasinan" value="<?= $row['address'] ?>" name="address" class="form-control shadow-sm mb-3" readonly>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="rounded p-3 border-0 bg-light close fw-bold shadow" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  
+
+
+                  <!-- UPDATE TO COMPLETED STATUS MODAL -->
+                  <div class="modal fade" id="Completed<?= $row['form_id'] ?>" tabindex="-2" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">Completed File Request</h1>
+                        </div>
+                        <div class="modal-body p-4">
+                          <form action="../includes/functions.php" method="POST">
+                            <center>
+                            <p class="h5">Are you sure you want to update this request?</p>
+                            <input type="text" name="req_id" value="<?= $row['form_id'] ?>" class="form-control mb-3" hidden required>
+                          </center> 
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="rounded p-2 w-25 border-0 bg-light close fw-bold shadow" data-bs-dismiss="modal">No</button>
+                          <button type="submit" name="completedrequest" class="bg-success text-light border-0 rounded p-2 w-25   fw-bold shadow">Yes</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div> 
+
+
+                  <?php $count += 1; }} ?>
+                </tbody>
+              </table>
+    </div>
+
+
+
+
+
+    <!-- COMPLETED TABLE  -->
+    <div class="tab-pane  mt-5 fade" id="nav-home6" role="tabpanel" aria-labelledby="nav-accept-tab" tabindex="0">
+        <h3 class="fw-bold">Completed Status</h2>
+        <table class="shadow bg-white rounded bg-white dataTable mt-5 mb-3 mt-3" id="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Reference</th>
+              <th>Name</th>
+              <th>Purpose</th>
+              <th>Status</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>View</th>
             </tr>
-            <!-- VIEW ACCEPTED MODAL -->
-            <div class="modal modal-fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">View File Request</h1>
-                  </div>
-                  <div class="modal-body p-4">
-                    <div class="row">
-                      <div class="col-md-6 col-sm-12 mb-3">
-                        <label class="fw-bold h6 mb-2 mt-2">Status :</label>
-                        <span class="alert w-100 rounded alert-success fw-bold p-2 shadow-sm mb-3">
-                          <?= $row['status'] ?>
-                        </span>
+          </thead>
+          <tbody>
+            <?php if (mysqli_num_rows($completed) > 0) {
+              $count = 1;
+              while ($row = $completed->fetch_assoc()) { ?>
+                <tr>
+                  <td><?= $count ?></td>
+                  <td><?= $row['ref'] ?></td>
+                  <td><?= $row['fname'] ?> <?= $row['mname'] ?> <?= $row['lname'] ?></td>
+                  <td><?= $row['purpose'] ?></td>
+                  <td >
+                    <span style="background-color: #d4edda; color: #155724;" class=" shadow-sm p-2  rounded fw-bold">
+                      Completed 
+                    </span>
+                  </td>
+                  <td><?= $row['created_at'] ?></td>
+                  <td><?= $row['updated_at'] ?></td>
+                  <td><button data-bs-toggle="modal" data-bs-target="#Viewaccept<?php echo $row['form_id'] ?>" class="btn p-2 rounded-circle fw-bold text-light shadow-lg m-1" style="background-color: #00214D ;">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                 </td>
+              </tr>
+
+
+              <!-- VIEW ACCEPTED MODAL -->
+              <div class="modal fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">View File Request</h1>
+                    </div>
+                    <div class="modal-body p-4">
+                      <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-3">
+                          <label class="fw-bold h6 mb-2 mt-2">Status :</label>
+                          <span class="alert w-100 rounded alert-success fw-bold p-2 shadow-sm mb-3">
+                            <?= $row['status'] ?>
+                          </span>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-3">
+                          <label class="fw-bold h6 mb-2 mt-2">Reference No. :</label>
+                          <span class="alert alert-info fw-bold shadow-sm p-2  mb-3">
+                            <?= $row['ref'] ?>
+                          </span>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-3">
+                          <label class="fw-bold h6 mt-2">Request Date :</label>
+                          <input type="text" name="birthdate" value="<?= date('d M Y', strtotime($row['created_at'])); ?>" class="form-control shadow-sm mb-3" readonly>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <label class="fw-bold h6 mt-2">Updated At</label>
+                          <input type="text" min="1" placeholder="20" value="<?= date('M d Y', strtotime($row['updated_at'])); ?>" name="age" class="form-control shadow-sm mb-3" readonly>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <label class="fw-bold h6 mt-2">Type of Request</label>
+                          <select name="formtype" class="form-control shadow-sm mb-3" disabled>
+                            <option value="" disabled>Select a request type</option>
+                            <option value="Barangay Clearance" <?= $row['formtype'] == 'Barangay Clearance' ? 'selected' : '' ?>>Barangay Clearance</option>
+                            <option value="Certificate of Indigency" <?= $row['formtype'] == 'Certificate of Indigency' ? 'selected' : '' ?>>Certificate of Indigency</option>
+                            <option value="Barangay Certificate" <?= $row['formtype'] == 'Barangay Certificate' ? 'selected' : '' ?>>Barangay Certificate</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-3">
+                          <label class="fw-bold h6 mt-2">Purpose</label>
+                          <input type="text" placeholder="E.g For work requirement" value="<?= $row['purpose'] ?>" name="purpose" class="form-control shadow-sm mb-3" readonly>
+                        </div>
+                        <div class="col-md-4 col-sm-12 mb-3">
+                          <label class="fw-bold h6 mt-2">Firstname</label>
+                          <input type="text" placeholder="Juan" value="<?= $row['fname'] ?>" name="firstname" class="form-control shadow-sm mb-3" readonly>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                          <label class="fw-bold h6 mt-2">Middlename</label>
+                          <input type="text" placeholder="Cruz" value="<?= $row['mname'] ?>" name="middlename" class="form-control shadow-sm mb-3" readonly>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                          <label class="fw-bold h6 mt-2">Lastname</label>
+                          <input type="text" placeholder="Dela Cruz" value="<?= $row['lname'] ?>" name="lastname" class="form-control shadow-sm mb-3" readonly>
+                        </div>
                       </div>
-                      <div class="col-md-6 col-sm-12 mb-3">
-                        <label class="fw-bold h6 mb-2 mt-2">Reference No. :</label>
-                        <span class="alert alert-info fw-bold shadow-sm p-2  mb-3">
-                          <?= $row['ref'] ?>
-                        </span>
+                      <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-3">
+                          <label class="fw-bold h6 mt-2">Birthdate</label>
+                          <input type="date" name="birthdate" value="<?= $row['bdate'] ?>" class="form-control shadow-sm mb-3" readonly>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <label class="fw-bold h6 mt-2">Age</label>
+                          <input type="number" min="1" placeholder="20" value="<?= $row['age'] ?>" name="age" class="form-control shadow-sm mb-3" readonly>
+                        </div>
                       </div>
-                      <div class="col-md-6 col-sm-12 mb-3">
-                        <label class="fw-bold h6 mt-2">Request Date :</label>
-                        <input type="text" name="birthdate" value="<?= date('d M Y', strtotime($row['created_at'])); ?>" class="form-control shadow-sm mb-3" readonly>
-                      </div>
-                      <div class="col-md-6 col-sm-12">
-                        <label class="fw-bold h6 mt-2">Updated At</label>
-                        <input type="text" min="1" placeholder="20" value="<?= date('M d Y', strtotime($row['updated_at'])); ?>" name="age" class="form-control shadow-sm mb-3" readonly>
-                      </div>
-                      <div class="col-md-6 col-sm-12">
-                        <label class="fw-bold h6 mt-2">Type of Request</label>
-                        <select name="formtype" class="form-control shadow-sm mb-3" disabled>
-                          <option value="" disabled>Select a request type</option>
-                          <option value="Barangay Clearance" <?= $row['formtype'] == 'Barangay Clearance' ? 'selected' : '' ?>>Barangay Clearance</option>
-                          <option value="Certificate of Indigency" <?= $row['formtype'] == 'Certificate of Indigency' ? 'selected' : '' ?>>Certificate of Indigency</option>
-                          <option value="Barangay Certificate" <?= $row['formtype'] == 'Barangay Certificate' ? 'selected' : '' ?>>Barangay Certificate</option>
-                        </select>
-                      </div>
-                      <div class="col-md-6 col-sm-12 mb-3">
-                        <label class="fw-bold h6 mt-2">Purpose</label>
-                        <input type="text" placeholder="E.g For work requirement" value="<?= $row['purpose'] ?>" name="purpose" class="form-control shadow-sm mb-3" readonly>
-                      </div>
-                      <div class="col-md-4 col-sm-12 mb-3">
-                        <label class="fw-bold h6 mt-2">Firstname</label>
-                        <input type="text" placeholder="Juan" value="<?= $row['fname'] ?>" name="firstname" class="form-control shadow-sm mb-3" readonly>
-                      </div>
-                      <div class="col-md-4 col-sm-12">
-                        <label class="fw-bold h6 mt-2">Middlename</label>
-                        <input type="text" placeholder="Cruz" value="<?= $row['mname'] ?>" name="middlename" class="form-control shadow-sm mb-3" readonly>
-                      </div>
-                      <div class="col-md-4 col-sm-12">
-                        <label class="fw-bold h6 mt-2">Lastname</label>
-                        <input type="text" placeholder="Dela Cruz" value="<?= $row['lname'] ?>" name="lastname" class="form-control shadow-sm mb-3" readonly>
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12 mb-3">
+                          <label class="fw-bold h6 mt-2">Address</label>
+                          <input type="text" placeholder="Pugaro Manaoag Pangasinan" value="<?= $row['address'] ?>" name="address" class="form-control shadow-sm mb-3" readonly>
+                        </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-md-6 col-sm-12 mb-3">
-                        <label class="fw-bold h6 mt-2">Birthdate</label>
-                        <input type="date" name="birthdate" value="<?= $row['bdate'] ?>" class="form-control shadow-sm mb-3" readonly>
-                      </div>
-                      <div class="col-md-6 col-sm-12">
-                        <label class="fw-bold h6 mt-2">Age</label>
-                        <input type="number" min="1" placeholder="20" value="<?= $row['age'] ?>" name="age" class="form-control shadow-sm mb-3" readonly>
-                      </div>
+                    <div class="modal-footer">
+                      <button type="button" class="rounded p-3 border-0 bg-light close fw-bold shadow" data-bs-dismiss="modal">Close</button>
                     </div>
-                    <div class="row">
-                      <div class="col-md-12 col-sm-12 mb-3">
-                        <label class="fw-bold h6 mt-2">Address</label>
-                        <input type="text" placeholder="Pugaro Manaoag Pangasinan" value="<?= $row['address'] ?>" name="address" class="form-control shadow-sm mb-3" readonly>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="rounded p-3 border-0 bg-light close fw-bold shadow" data-bs-dismiss="modal">Close</button>
                   </div>
                 </div>
               </div>
-            </div>
-            <?php $count += 1; }} ?>
-          </tbody>
-        </table>
-      </div>
+
+                  <?php $count += 1; }} ?>
+                </tbody>
+              </table>
+    </div>
 
 
 
@@ -490,7 +658,7 @@ $(document).ready(function() {
       <!-- DECLINED TABLE  -->
       <div class="tab-pane mt-5 ade" id="nav-home3" role="tabpanel" aria-labelledby="nav-decline-tab" tabindex="0">
         <h3 class="fw-bold">Declined Status</h2>
-            <table class="shadow rounded dataTable mb-3 mt-5" id="tabledeclined">
+            <table class="shadow bg-white rounded dataTable mb-3 mt-5" id="tabledeclined">
               <thead>
                 <tr>
                   <th>#</th>
@@ -613,7 +781,7 @@ $(document).ready(function() {
         <!-- CANCELED TABLE  -->
         <div class="tab-pane mt-5 fade" id="nav-home4" role="tabpanel" aria-labelledby="nav-cancelled-tab" tabindex="0">
           <h3 class="fw-bold">Cancelled Status</h3>
-            <table class="shadow rounded dataTable mb-3 mt-5" id="tablecancelled">
+            <table class="shadow bg-white rounded dataTable mb-3 mt-5" id="tablecancelled">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -736,7 +904,7 @@ $(document).ready(function() {
           <!-- ALL TABLE  -->
           <div class="tab-pane mt-5 fade" id="nav-home5" role="tabpanel" aria-labelledby="nav-cancelled-tab" tabindex="0">
             <h3 class="fw-bold">All Request</h3>
-                <table class="shadow rounded dataTable mb-3 mt-5" id="tableall">
+                <table class="shadow rounded bg-white dataTable mb-3 mt-5" id="tableall">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -956,3 +1124,11 @@ $(document).ready(function() {
           </div>
         </body>
 
+  <script>
+    var pathname = window.location.pathname;  
+    var lastSegment = pathname.split('/').pop();  
+    $(".location").val(lastSegment);
+    $(".location2").val(lastSegment);  
+    console.log(lastSegment);
+    
+</script>

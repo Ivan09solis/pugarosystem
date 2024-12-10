@@ -23,6 +23,7 @@ if (isset($_POST['login'])) {
                 if($row['isVerified']) {
                     $_SESSION['user_id'] = $row['user_id'];
                     $_SESSION['email'] = $row['email'];
+                    $_SESSION['fullname'] = $row['fname']." ".$row['mname']." ".$row['lname'];
                     $_SESSION['user'] = $row;
 
                     header("location:home.php");
@@ -254,6 +255,7 @@ h2 {
                             </body>
 
     <script>
+        
             // GENERATE CAPTCHA
             function generateCaptcha() {
                 var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -265,6 +267,7 @@ h2 {
                 $('.preview p').text(captcha);
                 $('#generated-captcha').val(captcha);
             }
+
 
             $(document).ready(function() {
                 generateCaptcha();

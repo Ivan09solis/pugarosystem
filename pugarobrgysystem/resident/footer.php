@@ -37,6 +37,7 @@ style="background-color: #00214D"
 				</h6>
 				<form action="../includes/functions.php" method="post">
 					<label class="mb-2">Tell us about your experience</label>
+					<input type="hidden" id="location" name="location">
 					<textarea name="feedback" id="feedback" class="form-control p-3 fw-bold shadow" placeholder="Write your message here..." rows="4"></textarea>
 					<button name="feedbackbtn" id="feedbackbtn" class="btn btn-outline-light p-2 mt-3 float-start fw-bold"><i class="fa-solid fa-paper-plane"></i> Send feedback </button>
 				</form>
@@ -91,3 +92,10 @@ style="background-color: #00214D"
 <!-- Grid container -->
 </footer>
   <!-- Footer -->
+
+
+  <script>
+  var pathname = window.location.pathname;  // Get the full pathname
+  var lastSegment = pathname.split('/').pop();  // Split by '/' and get the last part
+  $("#location").val(lastSegment);  // Use .text() for non-input elements
+</script>

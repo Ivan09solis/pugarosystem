@@ -48,15 +48,18 @@ $user = mysqli_query($conn, $sql);
   background-color: #45a049;
 
   }*/
-
   body {
-            background-image: url('../includes/logo/bg1.png');
-            background-size: cover;      
-            background-position: center;  
-            background-repeat: no-repeat; 
-            height: 100vh;               
-            margin: 0;                
-        }
+    position: relative;
+    margin: 0;
+    height: 100%; 
+    overflow-x: hidden; 
+    background-image: url('../includes/logo/bg1.png');
+    background-size: cover;    
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+
+}
 </style>
 
 <body>

@@ -91,34 +91,41 @@ h2, h1, .h4 , .date, .nav-link{
     border-radius: 15px;
 }
 
-body {
-            background-image: url('../includes/logo/bg1.png');
-            background-size: cover;      
-            background-position: center;  
-            background-repeat: no-repeat; 
-            height: 100vh;               
-            margin: 0;                
-        }
+
+        body {
+    position: relative;
+    margin: 0;
+    height: 100%; 
+    overflow-x: hidden; 
+    background-image: url('../includes/logo/bg1.png');
+    background-size: cover;    
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+
+}
 
 </style>
 
 <script type="text/javascript">
-  <?php 
-  if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
-    ?>
-    Swal.fire({
-        title: "<?php echo $_SESSION['status'] ?>",
-        icon: "<?php echo $_SESSION['status_code'] ?>",
-        text: "<?php echo $_SESSION['message'] ?>",
-        button: "Okay",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            location.href = "forms";
-        }
-    });
+
     <?php
-    unset($_SESSION['status']);
-}?>
+        if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
+            ?>
+            Swal.fire({
+                toast: true, 
+                position: 'top-end', 
+                icon: "<?php echo $_SESSION['status_code'] ?>",
+                title: "<?php echo $_SESSION['status'] ?>",
+                text: "<?php echo $_SESSION['message'] ?>",
+                showConfirmButton: false, 
+                timer: 5000, 
+                timerProgressBar: true, 
+            });
+            <?php
+            unset($_SESSION['status']);
+        }
+    ?>
 
 
 
@@ -203,9 +210,9 @@ $(document).ready(function() {
         <div class=" mt-5">
             <div class="nav  nav-pills" id="nav-tab" role="tablist">
                 <button class="nav-link active ms-auto p-3 m-1 shadow rounded fw-bold" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pending</button>
-                <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home2-tab" data-bs-toggle="tab" data-bs-target="#nav-home2" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">Accepted</button>
-                <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home3-tab" data-bs-toggle="tab" data-bs-target="#nav-home3" type="button" role="tab" aria-controls="nav-home3" aria-selected="false">Declined</button>
                 <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home4-tab" data-bs-toggle="tab" data-bs-target="#nav-home4" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">Cancelled</button>
+                <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home3-tab" data-bs-toggle="tab" data-bs-target="#nav-home3" type="button" role="tab" aria-controls="nav-home3" aria-selected="false">Declined</button>
+                <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home2-tab" data-bs-toggle="tab" data-bs-target="#nav-home2" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">Accepted</button>
                 <button class="nav-link p-3 shadow m-1 rounded fw-bold" id="nav-home2-tab" data-bs-toggle="tab" data-bs-target="#nav-home5" type="button" role="tab" aria-controls="nav-home2" aria-selected="false">All</button>
             </div>
 
@@ -228,8 +235,7 @@ $(document).ready(function() {
                                     <i class="fas fa-calendar-day"></i> <?= date('d M, Y (D)', strtotime($date));  ?>
                                 </div>
                             </div>
-                            <button  data-bs-toggle="modal" data-bs-target="#test" style="background-color: #00214D; color: white;
-                            " class="btn fw-bold border-0 p-3 mb-5 shadow newreq"><i class="fa-solid fa-plus"></i> Test</button>
+
                             <button  data-bs-toggle="modal" data-bs-target="#addlist" style="background-color: #00214D; color: white;
                             " class="btn fw-bold border-0 p-3 mb-5 shadow newreq"><i class="fa-solid fa-plus"></i> New Request</button>
                             <p class="fw-bold">Latest Transactions: <?= mysqli_num_rows($pending); ?> items</p>
@@ -258,7 +264,7 @@ $(document).ready(function() {
                                                 </div>    
 
                                                 <!-- VIEW PENDING MODAL -->
-                                                <div class="modal modal-fade" id="Viewpending<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                                                <div class="modal fade" id="Viewpending<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -283,7 +289,7 @@ $(document).ready(function() {
                                                                         <input type="text" name="birthdate" value="<?= date('d M Y', strtotime($row['created_at'])); ?>" class="form-control shadow-sm mb-3" readonly>
                                                                     </div>
                                                                     <div class="col-md-6 col-sm-12">
-                                                                        <label class="fw-bold h6 mt-2">Updated At</label>
+                                                                        <label class="fw-bold h6 mt-2">Last Update</label>
                                                                         <input type="text" min="1" placeholder="20" value="<?= date('M d Y', strtotime($row['updated_at'])); ?>" name="age" class="form-control shadow-sm mb-3" readonly>
                                                                     </div>
                                                                     <div class="col-md-6 col-sm-12">
@@ -339,7 +345,7 @@ $(document).ready(function() {
 
 
                                                 <!-- CANCEL PENDING MODAL -->
-                                                <div class="modal modal-fade" id="Cancel<?= $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                                                <div class="modal fade" id="Cancel<?= $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
                                                     <div class="modal-dialog modal-md modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -371,120 +377,6 @@ $(document).ready(function() {
                         </div>
                     </div>
 
-            <!-- test MODAL -->
-            <div class="modal fade" id="test" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">Test Form</h1>
-                        </div>
-                        <div class="modal-body p-4">
-                            <form action="../includes/functions.php" method="POST">
-
-                                <table class="w-100 border-1 p-2 shadow">
-                                    <tr >
-                                        <td class="bg-info p-5" rowspan="3">
-                                            <center>
-                                                <img src="../includes/formimg/Picture4.png" height= "100" width="100" class="rounded-circle">
-                                                <h3><i><u>Hon. Bonifacio N. Bigay</u></i></h3>
-                                                <p>PUNONG BARANGAY</p>
-
-                                                <br><br><br>
-
-                                                <h4>BARANGAY COUNCIL <br> MEMBERS</h4>
-
-                                                <br>
-
-                                                <h5 class="mb-3"><i><u>Hon. Naty P. Camara </u></i></h5>
-                                                <h5 class="mb-3"><i><u>Hon. Luzviminda B. Tanauan </u></i></h5>
-                                                <h5 class="mb-3"><i><u>Hon. Arnulfo A. Fronda </u></i></h5>
-                                                <h5 class="mb-3"><i><u>Hon. Lalain F. Capistrano </u></i></h5>
-                                                <h5 class="mb-3"><i><u>Hon. Bernardino R. Sagun Jr. </u></i></h5>
-                                                <h5 class="mb-3"><i><u>Hon. Noel M. Fabillon </u></i></h5>
-                                                <h5 class="mb-3"><i><u>Hon. Cristino P. Tabula </u></i></h5>
-
-                                                <br><br><br><br>
-
-                                                <h5><i><u>Hon. Jin Alisher B. Calizo</u></i></h5>
-                                                <h5><b>SK CHAIRMAN</b></h5>
-
-                                                <br><br>
-
-                                                <h5><i><u>Ms. Rhose Beatriz B. Esteves</u></i></h5>
-                                                <h5><b>BRGY. SECRETARY  </b></h5>
-
-                                                <br><br>
-
-                                                <h5><i><u>Mr. Wilfredo N. Muñoz</u></i></h5>
-                                                <h5><b>BRGY. TREASURER</b></h5>
-
-                                                
-
-
-                                                
-                                            </center>
-                                        </td>
-                                        <td class="bg-info" colspan="2">
-                                            <center>
-                                                <p>Republic of the Philippines</p>
-                                                <p>Province of Pangasinan</p>
-                                                <p>Municipality of Manaoag</p>
-                                                <br>
-                                                <h2><b>Barangay Pugaro</b></h2>
-                                                <h3><i>Office of the Punong Barangay</i></h3>
-                                                <h3><i>Barangay Clearance</i></h3>
-                                            </center>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="p-5">
-                                            <h6><b>TO WHOM IT MAY CONCERN: </b></h6>
-                                            <br><br>
-                                            <p>        	This is to CERTIFY that ___________________________________     of legal age, married/single /widow(er) Filipino whose signature and thumb mark appear below, a bonafide resident of this Barangay with residence and postal address at Pugaro, Manaoag, Pangasinan.	
-                                                    He /She is reputed to be a person of good moral character and integrity, a law-abiding citizen and neither has he/she had any derogatory record nor pending case on file in this office as of this date.
-                                                    This CERTIFICATION is being issued upon the request of the subject person in connection with his/her application for ________________________¬¬¬_________________________ 
-                                                            Issued this _____day of_____________________, ___________ At Barangay Pugaro, Manaoag, Pangasinan, Philippines
-                                            </p>
-
-
-                                            <br><br><br>
-
-                                            <center>
-                                                <h5><i><u>Hon. Bonifacio N. Bigay</u></i></h5>
-                                                <p><b>Punong Barangay</b></p>
-                                            </center>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="p-5">
-                                            <center>
-                                                <b><hr></b>
-                                                <h5><b>Signature Over Printed Name</b></h5>
-                                                <p>C.T. Cert: ________________________</p>
-                                                <p>Issued on: ________________________</p>
-                                                <p>Issued at:  ________________________</p>
-                                            </center>
-                                        </td>
-                                        <td>
-                                             <center>
-                                                <span style="height:300px; weight:150px; border: 3px;" class="shadow">  dgfdfh</span><span style="height:300px; weight:150px;  border: 3px;" class="shadow"> dfhdfhfdhgfh</span>
-                                                <br>
-                                                <p><b>Thumb Mark</b></p>
-                                            </center>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                            <div class="modal-footer">
-                            <button type="button" class="rounded p-2 w-25 border-0 bg-light close fw-bold shadow" data-bs-dismiss="modal">No</button>
-                            <button type="submit" name="cancelrequest" class="bg-primary border-0 rounded p-2 w-25 text-light   fw-bold shadow">Yes</button>
-                        </form>
-                    </div>
-                </div>
-            </div> 
-        </div>
-        </div>
 
 
 
@@ -514,8 +406,8 @@ $(document).ready(function() {
                                         <th>Name</th>
                                         <th>Purpose</th>
                                         <th>Status</th>
-                                        <th>Created At</th>
-                                        <th>Updated At</th>
+                                        <th>Date Requested</th>
+                                        <th>Last Update</th>
                                         <th>View</th>
                                     </tr>
                                 </thead>
@@ -541,7 +433,7 @@ $(document).ready(function() {
                                             </td>
                                         </tr>
                                         <!-- VIEW ACCEPTED MODAL -->
-                                        <div class="modal modal-fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                                        <div class="modal fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
                                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -566,7 +458,7 @@ $(document).ready(function() {
                                                                 <input type="text" name="birthdate" value="<?= date('d M Y', strtotime($row['created_at'])); ?>" class="form-control shadow-sm mb-3" readonly>
                                                             </div>
                                                             <div class="col-md-6 col-sm-12">
-                                                                <label class="fw-bold h6 mt-2">Updated At</label>
+                                                                <label class="fw-bold h6 mt-2">Last Update</label>
                                                                 <input type="text" min="1" placeholder="20" value="<?= date('M d Y', strtotime($row['updated_at'])); ?>" name="age" class="form-control shadow-sm mb-3" readonly>
                                                             </div>
                                                             <div class="col-md-6 col-sm-12">
@@ -608,7 +500,16 @@ $(document).ready(function() {
                                                         <div class="row">
                                                             <div class="col-md-12 col-sm-12 mb-3">
                                                                 <label class="fw-bold h6 mt-2">Address</label>
-                                                                <input type="text" placeholder="Pugaro Manaoag Pangasinan" value="<?= $row['address'] ?>" name="address" class="form-control shadow-sm mb-3" readonly>
+                                                                <select name="address" id="" class="form-select mb-3" required>
+                                                                    <option value="">Select--</option>
+                                                                    <option value="Zone 1"<?php if ($row['address'] == 'Zone 1') echo 'selected'; ?>>Zone 1</option>
+                                                                    <option value="Zone 2"<?php if ($row['address'] == 'Zone 2') echo 'selected'; ?>>Zone 2</option>
+                                                                    <option value="Zone 3"<?php if ($row['address'] == 'Zone 3') echo 'selected'; ?>>Zone 3</option>
+                                                                    <option value="Zone 4"<?php if ($row['address'] == 'Zone 4') echo 'selected'; ?>>Zone 4</option>
+                                                                    <option value="Zone 5"<?php if ($row['address'] == 'Zone 5') echo 'selected'; ?>>Zone 5</option>
+                                                                    <option value="Zone 6"<?php if ($row['address'] == 'Zone 6') echo 'selected'; ?>>Zone 6</option>
+                                                                    <option value="Zone 7"<?php if ($row['address'] == 'Zone 7') echo 'selected'; ?>>Zone 7</option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -626,78 +527,6 @@ $(document).ready(function() {
                     </div>
 
 
-                    <!-- Add  Modal -->
-                    <div class="modal fade" id="addlist" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="    true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">New File Request</h1>
-                                </div>
-                                <form action="../includes/functions.php" method="POST"  enctype="multipart/form-data">
-                                  <div class="modal-body p-4">
-                                    <div class="row">
-                                        <!-- Purpose -->
-                                        <div class="col-md-6 col-sm-12">
-                                            <label class="fw-bold h6 mt-2">Type of Request</label>
-                                            <select name="formtype" class="form-control mb-3" required>
-                                                <option value="" disabled selected>Select a request type</option>
-                                                <option value="Barangay Clearance">Barangay Clearance</option>
-                                                <option value="Certificate of Indigency">Certificate of Indigency</option>
-                                                <option value="Barangay Certificate">Barangay Certificate</option>
-                                            </select>
-                                        </div>
-                                        <!-- Purpose -->
-                                        <div class="col-md-6 col-sm-12 mb-3">
-                                            <label class="fw-bold h6   mt-2">Purpose</label>
-                                            <input type="text" placeholder="E.g For work requirement" name="purpose" class="form-control mb-3" required>
-                                        </div>
-                                        <!-- Firstname -->
-                                        <div class="col-md-4 col-sm-12 mb-3">
-                                            <label class="fw-bold h6 mt-2">Firstname</label>
-                                            <input type="text" placeholder="Juan" name="firstname" class="form-control mb-3" required>
-                                        </div>
-                                        <!-- Middlename -->
-                                        <div class="col-md-4 col-sm-12">
-                                            <label class="fw-bold h6 mt-2">Middlename</label>
-                                            <input type="text" placeholder="Cruz" name="middlename" class="form-control mb-3" required>
-                                        </div>
-                                        <!-- Lastname -->
-                                        <div class="col-md-4 col-sm-12">
-                                            <label class="fw-bold h6 mt-2">Lastname</label>
-                                            <input type="text" placeholder="Dela Cruz" name="lastname" class="form-control mb-3" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <!-- Birthdate -->
-                                        <div class="col-md-6 col-sm-12 mb-3">
-                                            <label class="fw-bold h6 mt-2">Birthdate</label>
-                                            <input type="date" name="birthdate" class="form-control mb-3" required>
-                                        </div>
-                                        <!-- Age -->
-                                        <div class="col-md-6 col-sm-12">
-                                            <label class="fw-bold h6 mt-2">Age</label>
-                                            <input type="number" min="1" placeholder="20" name="age" class="form-control mb-3" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <!-- Address -->
-                                        <div class="col-md-12 col-sm-12 mb-3">
-                                            <label class="fw-bold h6 mt-2">Address</label>
-                                            <input type="text" placeholder="Pugaro Manaoag Pangasinan"  name="address" class="form-control mb-3" required>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="rounded p-3 border-0 bg-light close fw-bold shadow" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" name="newrequest" class="clearance border-0 rounded p-3 fw-bold shadow">Apply</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
 
 
                 <!-- DECLINED TABLE  -->
@@ -723,8 +552,8 @@ $(document).ready(function() {
                                         <th>Name</th>
                                         <th>Purpose</th>
                                         <th>Status</th>
-                                        <th>Created At</th>
-                                        <th>Updated At</th>
+                                        <th>Date Requested</th>
+                                        <th>Last Update</th>
                                         <th>View</th>
                                     </tr>
                                 </thead>
@@ -750,7 +579,7 @@ $(document).ready(function() {
                                             </td>
                                         </tr>
                                         <!-- VIEW ACCEPTED MODAL -->
-                                        <div class="modal modal-fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                                        <div class="modal fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
                                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -775,7 +604,7 @@ $(document).ready(function() {
                                                                 <input type="text" name="birthdate" value="<?= date('d M Y', strtotime($row['created_at'])); ?>" class="form-control shadow-sm mb-3" readonly>
                                                             </div>
                                                             <div class="col-md-6 col-sm-12">
-                                                                <label class="fw-bold h6 mt-2">Updated At</label>
+                                                                <label class="fw-bold h6 mt-2">Last Update</label>
                                                                 <input type="text" min="1" placeholder="20" value="<?= date('M d Y', strtotime($row['updated_at'])); ?>" name="age" class="form-control shadow-sm mb-3" readonly>
                                                             </div>
                                                             <div class="col-md-6 col-sm-12">
@@ -817,7 +646,16 @@ $(document).ready(function() {
                                                         <div class="row">
                                                             <div class="col-md-12 col-sm-12 mb-3">
                                                                 <label class="fw-bold h6 mt-2">Address</label>
-                                                                <input type="text" placeholder="Pugaro Manaoag Pangasinan" value="<?= $row['address'] ?>" name="address" class="form-control shadow-sm mb-3" readonly>
+                                                                <select name="address" id="" class="form-select mb-3" required>
+                                                                    <option value="">Select--</option>
+                                                                    <option value="Zone 1"<?php if ($row['address'] == 'Zone 1') echo 'selected'; ?>>Zone 1</option>
+                                                                    <option value="Zone 2"<?php if ($row['address'] == 'Zone 2') echo 'selected'; ?>>Zone 2</option>
+                                                                    <option value="Zone 3"<?php if ($row['address'] == 'Zone 3') echo 'selected'; ?>>Zone 3</option>
+                                                                    <option value="Zone 4"<?php if ($row['address'] == 'Zone 4') echo 'selected'; ?>>Zone 4</option>
+                                                                    <option value="Zone 5"<?php if ($row['address'] == 'Zone 5') echo 'selected'; ?>>Zone 5</option>
+                                                                    <option value="Zone 6"<?php if ($row['address'] == 'Zone 6') echo 'selected'; ?>>Zone 6</option>
+                                                                    <option value="Zone 7"<?php if ($row['address'] == 'Zone 7') echo 'selected'; ?>>Zone 7</option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -860,8 +698,8 @@ $(document).ready(function() {
                                             <th>Name</th>
                                             <th>Purpose</th>
                                             <th>Status</th>
-                                            <th>Created At</th>
-                                            <th>Updated At</th>
+                                            <th>Date Requested</th>
+                                            <th>Last Update</th>
                                             <th>View</th>
                                         </tr>
                                     </thead>
@@ -887,7 +725,7 @@ $(document).ready(function() {
                                                 </td>
                                             </tr>
                                             <!-- VIEW ACCEPTED MODAL -->
-                                            <div class="modal modal-fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                                            <div class="modal fade" id="Viewaccept<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
                                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -912,7 +750,7 @@ $(document).ready(function() {
                                                                     <input type="text" name="birthdate" value="<?= date('d M Y', strtotime($row['created_at'])); ?>" class="form-control shadow-sm mb-3" readonly>
                                                                 </div>
                                                                 <div class="col-md-6 col-sm-12">
-                                                                    <label class="fw-bold h6 mt-2">Updated At</label>
+                                                                    <label class="fw-bold h6 mt-2">Last Update</label>
                                                                     <input type="text" min="1" placeholder="20" value="<?= date('M d Y', strtotime($row['updated_at'])); ?>" name="age" class="form-control shadow-sm mb-3" readonly>
                                                                 </div>
                                                                 <div class="col-md-6 col-sm-12">
@@ -953,8 +791,16 @@ $(document).ready(function() {
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-md-12 col-sm-12 mb-3">
-                                                                    <label class="fw-bold h6 mt-2">Address</label>
-                                                                    <input type="text" placeholder="Pugaro Manaoag Pangasinan" value="<?= $row['address'] ?>" name="address" class="form-control shadow-sm mb-3" readonly>
+                                                                    <label class="fw-bold h6 mt-2">Address</label>                                      <select name="address" id="" class="form-select mb-3" required>
+                                                                        <option value="">Select--</option>
+                                                                        <option value="Zone 1"<?php if ($row['address'] == 'Zone 1') echo 'selected'; ?>>Zone 1</option>
+                                                                        <option value="Zone 2"<?php if ($row['address'] == 'Zone 2') echo 'selected'; ?>>Zone 2</option>
+                                                                        <option value="Zone 3"<?php if ($row['address'] == 'Zone 3') echo 'selected'; ?>>Zone 3</option>
+                                                                        <option value="Zone 4"<?php if ($row['address'] == 'Zone 4') echo 'selected'; ?>>Zone 4</option>
+                                                                        <option value="Zone 5"<?php if ($row['address'] == 'Zone 5') echo 'selected'; ?>>Zone 5</option>
+                                                                        <option value="Zone 6"<?php if ($row['address'] == 'Zone 6') echo 'selected'; ?>>Zone 6</option>
+                                                                        <option value="Zone 7"<?php if ($row['address'] == 'Zone 7') echo 'selected'; ?>>Zone 7</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -972,78 +818,7 @@ $(document).ready(function() {
                         </div>
 
 
-                        <!-- Add  Modal -->
-                        <div class="modal modal-fade" id="addlist" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="    true">
-                            <div class="modal-dialog modal-lg modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fw-bold fs-5" id="exampleModalLabel">New File Request</h1>
-                                    </div>
-                                    <form action="../includes/functions.php" method="POST"  enctype="multipart/form-data">
-                                      <div class="modal-body p-4">
-                                        <div class="row">
-                                            <!-- Purpose -->
-                                            <div class="col-md-6 col-sm-12">
-                                                <label class="fw-bold h6 mt-2">Type of Request</label>
-                                                <select name="formtype" class="form-control mb-3" required>
-                                                    <option value="" disabled selected>Select a request type</option>
-                                                    <option value="Barangay Clearance">Barangay Clearance</option>
-                                                    <option value="Certificate of Indigency">Certificate of Indigency</option>
-                                                    <option value="Barangay Certificate">Barangay Certificate</option>
-                                                </select>
-                                            </div>
-                                            <!-- Purpose -->
-                                            <div class="col-md-6 col-sm-12 mb-3">
-                                                <label class="fw-bold h6   mt-2">Purpose</label>
-                                                <input type="text" placeholder="E.g For work requirement" name="purpose" class="form-control mb-3" required>
-                                            </div>
-                                            <!-- Firstname -->
-                                            <div class="col-md-4 col-sm-12 mb-3">
-                                                <label class="fw-bold h6 mt-2">Firstname</label>
-                                                <input type="text" placeholder="Juan" name="firstname" class="form-control mb-3" required>
-                                            </div>
-                                            <!-- Middlename -->
-                                            <div class="col-md-4 col-sm-12">
-                                                <label class="fw-bold h6 mt-2">Middlename</label>
-                                                <input type="text" placeholder="Cruz" name="middlename" class="form-control mb-3" required>
-                                            </div>
-                                            <!-- Lastname -->
-                                            <div class="col-md-4 col-sm-12">
-                                                <label class="fw-bold h6 mt-2">Lastname</label>
-                                                <input type="text" placeholder="Dela Cruz" name="lastname" class="form-control mb-3" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <!-- Birthdate -->
-                                            <div class="col-md-6 col-sm-12 mb-3">
-                                                <label class="fw-bold h6 mt-2">Birthdate</label>
-                                                <input type="date" name="birthdate" class="form-control mb-3" required>
-                                            </div>
-                                            <!-- Age -->
-                                            <div class="col-md-6 col-sm-12">
-                                                <label class="fw-bold h6 mt-2">Age</label>
-                                                <input type="number" min="1" placeholder="20" name="age" class="form-control mb-3" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <!-- Address -->
-                                            <div class="col-md-12 col-sm-12 mb-3">
-                                                <label class="fw-bold h6 mt-2">Address</label>
-                                                <input type="text" placeholder="Pugaro Manaoag Pangasinan"  name="address" class="form-control mb-3" required>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="rounded p-3 border-0 bg-light close fw-bold shadow" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" name="newrequest" class="clearance border-0 rounded p-3 fw-bold shadow">Apply</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                     
 
 
                     <!-- CANCELED TABLE  -->
@@ -1069,8 +844,8 @@ $(document).ready(function() {
                                             <th>Name</th>
                                             <th>Purpose</th>
                                             <th>Status</th>
-                                            <th>Created At</th>
-                                            <th>Updated At</th>
+                                            <th>Date Requested</th>
+                                            <th>Last Update</th>
                                             <th>View</th>
                                         </tr>
                                     </thead>
@@ -1108,7 +883,7 @@ $(document).ready(function() {
                                                 </td>
                                             </tr>
                                             <!-- VIEW ACCEPTED MODAL -->
-                                            <div class="modal modal-fade" id="Viewall<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+                                            <div class="modal fade" id="Viewall<?php echo $row['form_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
                                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -1145,7 +920,7 @@ $(document).ready(function() {
                                                                     <input type="text" name="birthdate" value="<?= date('d M Y', strtotime($row['created_at'])); ?>" class="form-control shadow-sm mb-3" readonly>
                                                                 </div>
                                                                 <div class="col-md-6 col-sm-12">
-                                                                    <label class="fw-bold h6 mt-2">Updated At</label>
+                                                                    <label class="fw-bold h6 mt-2">Last Update</label>
                                                                     <input type="text" min="1" placeholder="20" value="<?= date('M d Y', strtotime($row['updated_at'])); ?>" name="age" class="form-control shadow-sm mb-3" readonly>
                                                                 </div>
                                                                 <div class="col-md-6 col-sm-12">
@@ -1187,7 +962,16 @@ $(document).ready(function() {
                                                             <div class="row">
                                                                 <div class="col-md-12 col-sm-12 mb-3">
                                                                     <label class="fw-bold h6 mt-2">Address</label>
-                                                                    <input type="text" placeholder="Pugaro Manaoag Pangasinan" value="<?= $row['address'] ?>" name="address" class="form-control shadow-sm mb-3" readonly>
+                                                                    <select name="address" id="" class="form-select mb-3" required>
+                                                                        <option value="">Select--</option>
+                                                                        <option value="Zone 1"<?php if ($row['address'] == 'Zone 1') echo 'selected'; ?>>Zone 1</option>
+                                                                        <option value="Zone 2"<?php if ($row['address'] == 'Zone 2') echo 'selected'; ?>>Zone 2</option>
+                                                                        <option value="Zone 3"<?php if ($row['address'] == 'Zone 3') echo 'selected'; ?>>Zone 3</option>
+                                                                        <option value="Zone 4"<?php if ($row['address'] == 'Zone 4') echo 'selected'; ?>>Zone 4</option>
+                                                                        <option value="Zone 5"<?php if ($row['address'] == 'Zone 5') echo 'selected'; ?>>Zone 5</option>
+                                                                        <option value="Zone 6"<?php if ($row['address'] == 'Zone 6') echo 'selected'; ?>>Zone 6</option>
+                                                                        <option value="Zone 7"<?php if ($row['address'] == 'Zone 7') echo 'selected'; ?>>Zone 7</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1206,7 +990,7 @@ $(document).ready(function() {
 
 
                         <!-- Add  Modal -->
-                        <div class="modal modal-fade" id="addlist" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="    true">
+                        <div class="modal fade" id="addlist" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="    true">
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -1223,6 +1007,8 @@ $(document).ready(function() {
                                                     <option value="Barangay Clearance">Barangay Clearance</option>
                                                     <option value="Certificate of Indigency">Certificate of Indigency</option>
                                                     <option value="Barangay Certificate">Barangay Certificate</option>
+                                                    <option value="Barangay First Time Job Seeker">Barangay First Time Job Seeker</option>
+                                                    <option value="Certificate of Residency">Certificate of Residency</option>
                                                 </select>
                                             </div>
                                             <!-- Purpose -->
@@ -1238,7 +1024,7 @@ $(document).ready(function() {
                                             <!-- Middlename -->
                                             <div class="col-md-4 col-sm-12">
                                                 <label class="fw-bold h6 mt-2">Middlename</label>
-                                                <input type="text" placeholder="Cruz" name="middlename" class="form-control mb-3" required>
+                                                <input type="text" placeholder="Cruz" name="middlename" class="form-control mb-3">
                                             </div>
                                             <!-- Lastname -->
                                             <div class="col-md-4 col-sm-12">
@@ -1264,7 +1050,16 @@ $(document).ready(function() {
                                             <!-- Address -->
                                             <div class="col-md-12 col-sm-12 mb-3">
                                                 <label class="fw-bold h6 mt-2">Address</label>
-                                                <input type="text" placeholder="Pugaro Manaoag Pangasinan"  name="address" class="form-control mb-3" required>
+                                                <select name="address" id="" class="form-select mb-3" required>
+                                                    <option value="">Select--</option>
+                                                    <option value="Zone 1">Zone 1</option>
+                                                    <option value="Zone 2">Zone 2</option>
+                                                    <option value="Zone 3">Zone 3</option>
+                                                    <option value="Zone 4">Zone 4</option>
+                                                    <option value="Zone 5">Zone 5</option>
+                                                    <option value="Zone 6">Zone 6</option>
+                                                    <option value="Zone 7">Zone 7</option>
+                                                </select>
                                             </div>
 
                                         </div>

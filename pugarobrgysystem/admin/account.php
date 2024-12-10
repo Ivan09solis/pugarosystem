@@ -6,8 +6,6 @@ include 'layout.php';
 $user_id = mysqli_real_escape_string($conn, $_SESSION['user_id']);
 $sql = "SELECT * FROM `user` WHERE `user_id` = $user_id";
 $user = mysqli_query($conn, $sql);
-
-
 ?>
 
 <style>
@@ -46,7 +44,9 @@ body {
 <!-- NAVBAR HEADER -->
 <div class="navbar shadow rounded">
     <div class="navbar-title">
-        <h2 class="title fw-bold p-3">My Account</h3>
+
+        <h2 class="title fw-bold p-3"> <button class="openbtn border-0" onclick="toggleSidebar()">☰</button>
+        My Account</h3>
         </div>
         <div class="navbar-info">
             <a href="logout.php" class="logout m-3 h3 fw-bold"><i class="fa-solid fa-right-from-bracket"></i></a>
@@ -70,7 +70,7 @@ body {
 
                                 <form action="../includes/functions.php" method="POST" enctype="multipart/form-data">
 
-                                  <input type="file" id="fileInput" name="fileInput" class="file-input" accept="image/*">
+                                  <input type="file" id="fileInput" name="fileInput"  class="file-input" accept="image/*">
 
                                   <button type="button" class="btn btn-info text-light p-3 w-50 m-1 fw-bold" onclick="document.getElementById('fileInput').click();">Change Profile</button>
                                   <br>

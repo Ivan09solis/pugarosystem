@@ -67,7 +67,7 @@
             $_SESSION['status_code'] = "error";
             $_SESSION['message'] = "Your Voter's ID doesn't exist."; 
             $float = true;
-            echo "dito sa voter is";
+        
         }
         
 
@@ -101,14 +101,13 @@
                 $run = mysqli_query($conn, $sql1);
 
                 if ($run) {
-                    echo $voterid;
                     $_SESSION['modalshow'] = true; // SESSION FOR MODAL MODAL
                     $success = "Your code was sent to you via email " . $email . "";
                     $_SESSION['verefymessage'] = $success;
 
 
                     $a = "Pugaro Management System";
-                    $b = "<html><body><p>Hi mam/sir $firstname $middlename $lastname. Good day! Thanks for registering your account in Pugaro Management. Your OTP cose is $vkey </a></p></body></html>";
+                    $b = "<html><body><p>Hi mam/sir $firstname $middlename $lastname. Good day! Thanks for registering your account in Pugaro Management. Your OTP code is $vkey </a></p></body></html>";
                     $c = $email;
                     $d = $firstname . " " . $middlename . " " . $lastname;
 
@@ -534,7 +533,7 @@ function myFunction() {
         </script>
 
     <?php
-        // unset($_SESSION['status']);
+        unset($_SESSION['status']);
     }
     ?>
 

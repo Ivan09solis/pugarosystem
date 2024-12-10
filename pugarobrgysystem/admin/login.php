@@ -104,22 +104,40 @@ input[type="email"], input[type="password"], input[type="text"] {
     height: 100%;
 }
 
+body {
+    position: relative;
+    margin: 0;
+    height: 100%; 
+    overflow-x: hidden; 
+    background-image: url('../includes/logo/bg1.png');
+    background-size: cover;    
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+
+}
+
+
+
+
 .clip {
     z-index: 1;
-    position: absolute;
+    position: fixed;  
     height: 100vh;
     width: 100%;
-    clip-path: polygon(0% 0%, 30% 0, 45% 50%, 30% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 35% 0, 53% 50%, 35% 100%, 0% 100%);
     background-color: #00214D;
+    top: 0;   
 }
 
 .clip2 {
     z-index: 0;
-    position: absolute;
+    position: fixed; 
     height: 100vh;
     width: 100%;
-    clip-path: polygon(0% 0%, 35% 0, 47% 50%, 35% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 40% 0, 55% 50%, 40% 100%, 0% 100%);
     background-color: #55D1FF;
+    top: 0;   
 }
 
 
@@ -167,14 +185,22 @@ a:hover{
     color: #00214D;  
 }
 
-body {
-    background-image: url('../includes/logo/bg1.png');
-    background-size: cover;      
-    background-position: center;  
-    background-repeat: no-repeat; 
-    height: 100vh;               
-    margin: 0;                
+
+h2 {
+        color: white !important;
+    }
+
+@media (max-width: 1136px) {
+    .clip, .clip2 {
+        display: none;  
+    }
+
+    h2 {
+        color: #00214D !important;
+    }
 }
+
+
 
 </style>
 
@@ -182,21 +208,25 @@ body {
 <body>
     <div class="clip"></div>
     <div class="clip2"></div>
-    <div class="container full-height d-flex justify-content-center align-items-center">
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-lg-6 col-md-8 col-sm-10 mx-auto">
-                    <center>
-                        <img src="../includes/logo/logo.gif" style="margin-top: 150px; margin-right: 200px;" height="150" width="150" class="shadow-lg rounded-circle">
-                    </center>
-                    <h2 class="fw-bold mt-3 text-light text-center mb-3" style=" margin-right: 200px;">
-                        PUGARO MANAGEMENT SYSTEM
-                    </h2>
+   
+   
+    <div class="container-fluid d-flex align-items-center justify-content-center full-height">
+        <div class="container vh-100 d-flex align-items-center justify-content-center">
+            <div class="row h-100 w-100 p-5">
+                <div class="col-lg-7 col-md-12 col-sm-12 d-flex align-items-center">
+                    <div>
+                        <center>
+                            <img src="../includes/logo/logo.gif" height="150" width="150" class="shadow-lg rounded-circle">
+                        </center>
+                        <h2 class="fw-bold mt-3 text-center mb-3">
+                            PUGARO MANAGEMENT SYSTEM
+                        </h2>
+                    </div>
                 </div>
                 
-                <div class="col-lg-5 col-md-8 col-sm-10 mx-auto">
+                <div class="col-lg-5 col-md-12 col-sm-12 d-flex align-items-center justify-content-center">
+                <div class="card p-4 rounded mb-5 opacity-75">
 
-                <div class="card p-4 rounded opacity-75">
                     <h3 class="fw-bold p-3 mb-4" style="border-left: 3px solid #00214D; border-radius: 3px; color: black;">
                         ADMINISTRATOR'S LOGIN
                     </h3>

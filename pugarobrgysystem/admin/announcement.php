@@ -77,6 +77,7 @@ body {
             <tr>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Announcement for</th>
                 <th>Created At</th>
                 <th>Last Modified</th>
                 <th>Action</th>
@@ -91,6 +92,7 @@ body {
                     <tr>
                         <td><?= $row['title'] ?></td>
                         <td><?= $row['description'] ?></td>
+                        <td><?php echo $row['intended'] ? $row['intended'] : "General"; ?></td>
                         <td><?= $row['created_at'] ?></td>
                         <td><?= $row['updated_at'] ?></td>
                         <td class="text-nowrap">
@@ -127,6 +129,17 @@ body {
                                     <div class="col-md-12 col-sm-12 col-12">
                                         <textarea name="description" class="form-control mb-3" required><?php echo htmlspecialchars($row['description']); ?></textarea>
                                     </div>
+
+                                    <div class="col-md-6 col-sm-12 col-12">
+                                        <div class="label h6 mt-2">Announcement For :</div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-12">
+                                    <select name="intended" id="intended" class="form-select mb-3">
+                                        <option value="">General</option>
+                                        <option value="4ps"<?php if ($row['intended'] == '4ps') echo 'selected'; ?>>4p's</option>
+                                    </select>     
+                                </div>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="p-2 rounded btn-light fw-bold border-0 close shadow" data-bs-dismiss="modal">Close</button>
@@ -170,6 +183,13 @@ body {
                     </div>
                     <div class="col-md-12 col-sm-12 col-12">
                         <textarea name="description" class="form-control mb-3" required></textarea>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-12">
+                        <div class="label h6 mt-2">Announcement For :</div>
+                        <select name="intended" id="intended" class="form-select mb-3">
+                            <option value="">General</option>
+                            <option value="4ps">4p's</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

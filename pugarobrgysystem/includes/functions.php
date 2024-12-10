@@ -20,7 +20,7 @@ if (isset($_POST['addresident'])) {
     $address = mysqli_real_escape_string($conn, $_POST['address']);
 
     // Check if the name already exists
-    $check_sql = "SELECT * FROM resident WHERE name = '$name'";
+    $check_sql = "SELECT * FROM `resident` WHERE `name` = '$name' OR `voterid` =  $voterid";
     $check_result = mysqli_query($conn, $check_sql);
 
     if (mysqli_num_rows($check_result) > 0) {
@@ -307,12 +307,17 @@ if(isset($_POST['deleteblotter'])){
 // ANNOUNCEMENT----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Add Announcement
 if (isset($_POST['addannouncement'])) {
+
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $intended = mysqli_real_escape_string($conn, $_POST['intended']);
+    
 
     // Check if the name already exists
     $check_sql = "SELECT * FROM announcement WHERE `title` = '$title'";
     $check_result = mysqli_query($conn, $check_sql);
+
+
 
     if (mysqli_num_rows($check_result) > 0) {
         // Title already exists
@@ -321,7 +326,7 @@ if (isset($_POST['addannouncement'])) {
         $_SESSION['message'] = "Title already exists.";
         header("location:../admin/announcement.php");
     } else {
-        $sql = "INSERT INTO announcement (`id`, `title`, `description`, `created_at`, `updated_at`) VALUES (NULL, '$title', '$description', now(), now())";
+        $sql = "INSERT INTO announcement (`id`, `title`, `description`, `intended`,`created_at`, `updated_at`) VALUES (NULL, '$title', '$description','$intended', now(), now())";
         $result = mysqli_query($conn, $sql);        
 
         if ($result != TRUE) {
@@ -330,6 +335,22 @@ if (isset($_POST['addannouncement'])) {
             $_SESSION['message'] = "Fail to add Announcement.";
             header("location:../admin/announcement.php");
         } else {
+
+            $user4ps = "SELECT * FROM `user` WHERE `Is4ps` = 1";
+            $MAYRESULT = mysqli_query($conn, $user4ps);     
+
+            if ($MAYRESULT && $intended !== "") {
+                require_once('../sendmail.php');
+                while ($row = mysqli_fetch_assoc($MAYRESULT)) {
+                    $a = "Pugaro Management System";
+                    $b = "<html><body><p>Hi mam/sir " . $row['fname'] . " " . $row['mname'] . " " . $row['lname'] . ". <b>NOTIFICATION : </b> A new announcement regarding 4P's: $title, $description</p></body></html>";
+                    $c = $row['email'];
+                    $d = $row['fname'] . " " . $row['mname'] . " " . $row['lname'];
+                    setData($a, $b, $c, $d);
+                }
+            }
+
+
             $_SESSION['status'] = "Successfully added.";
             $_SESSION['status_code'] = "success";
             $_SESSION['message'] = "Announcement added.";
@@ -343,6 +364,7 @@ if (isset($_POST['updateannouncement'])) {
     $id = mysqli_real_escape_string($conn, $_POST['id']);
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $intended = mysqli_real_escape_string($conn, $_POST['intended']);
 
         // Check if the name already exists
     $check_sql = "SELECT * FROM announcement WHERE `title` = '$title' AND `id` != $id";
@@ -356,7 +378,7 @@ if (isset($_POST['updateannouncement'])) {
         header("location:../admin/announcement.php");
     } else {
 
-        $sql = "UPDATE `announcement` SET `title` = '$title', `description` = '$description', `updated_at` = now() WHERE `id` = $id";
+        $sql = "UPDATE `announcement` SET `title` = '$title', `description` = '$description',  `intended` = '$intended', `updated_at` = now() WHERE `id` = $id";
         $result = mysqli_query($conn, $sql);
 
 
@@ -369,6 +391,22 @@ if (isset($_POST['updateannouncement'])) {
 
         } 
         else if($result == TRUE){
+
+            $user4ps = "SELECT * FROM `user` WHERE `Is4ps` = 1";
+            $MAYRESULT = mysqli_query($conn, $user4ps);     
+
+            if ($MAYRESULT && $intended !== "") {
+                require_once('../sendmail.php');
+                while ($row = mysqli_fetch_assoc($MAYRESULT)) {
+                    $a = "Pugaro Management System";
+                    $b = "<html><body><p>Hi mam/sir " . $row['fname'] . " " . $row['mname'] . " " . $row['lname'] . ". <b>NOTIFICATION : </b> A new announcement regarding 4P's: $title, $description</p></body></html>";
+                    $c = $row['email'];
+                    $d = $row['fname'] . " " . $row['mname'] . " " . $row['lname'];
+                    setData($a, $b, $c, $d);
+                }
+            }
+
+
             $_SESSION['status'] = "Successfully Updated.";
             $_SESSION['status_code'] = "success";
             $_SESSION['message'] = "Updated Successful.";
@@ -558,12 +596,32 @@ if(isset($_POST['deleteevent'])){
 if (isset($_POST['acceptrequest'])) {
     $id = mysqli_real_escape_string($conn, $_POST['req_id']);
     $status = 'Accepted';
-    echo $id;
+
+
     // Check if the request exist
     $check_sql = "SELECT * FROM forms WHERE `form_id` = '$id'";
     $check_result = mysqli_query($conn, $check_sql);
-    
-    if (mysqli_num_rows($check_result) > 0) {
+
+    while ($row = $check_result->fetch_assoc()) {
+        $user_id = $row['user'];
+
+    }
+
+    $check_user = "SELECT * FROM user WHERE `user_id` = '$user_id'";
+    $getuser = mysqli_query($conn, $check_user);
+
+    require_once('../sendmail.php');
+    while ($row = $getuser->fetch_assoc()) {
+        $a = "Pugaro Management System";
+       $b = "<html><body><p>Hi mam/sir " . $row['fname'] . " " . $row['mname'] . " " . $row['lname'] . ". <b>NOTIFICATION : </b>Your Request form is ready to pick up at the Barangay Hall.</p></body></html>";
+        $c = $row['email'];
+        $d = $row['fname'] . " " . $row['mname'] . " " . $row['lname'];
+        
+        setData($a, $b, $c, $d);
+    }
+
+
+
         $sql = "UPDATE `forms` SET `status` = '$status' , `updated_at` = now() WHERE `form_id` = $id";
         $result = mysqli_query($conn, $sql);
 
@@ -572,18 +630,50 @@ if (isset($_POST['acceptrequest'])) {
             $_SESSION['status'] = "Fail to accept.";
             $_SESSION['status_code'] = "error";
             $_SESSION['message'] = "Request didn't accept.";
-            header("location:../admin/application.php");
 
 
         } 
         else if($result == TRUE){
+            
+
+
             $_SESSION['status'] = "Request Accepted successfully.";
             $_SESSION['status_code'] = "success";
             $_SESSION['message'] = "Accepted successful.";
+
+        }
+
+        $location = mysqli_real_escape_string($conn, $_POST['location']) ? mysqli_real_escape_string($conn, $_POST['location'])  : mysqli_real_escape_string($conn, $_POST['location2'])  ;
+        header("location:../admin/$location");
+
+}
+
+
+// UPDATE COMPLETED REQUEST
+if (isset($_POST['completedrequest'])) {
+
+    $id = mysqli_real_escape_string($conn, $_POST['req_id']);
+    $status = 'Completed';
+
+
+        $sql = "UPDATE `forms` SET `status` = '$status' , `updated_at` = now() WHERE `form_id` = $id";
+        $result = mysqli_query($conn, $sql);
+
+
+        if ($result != TRUE) {
+            $_SESSION['status'] = "Fail to update.";
+            $_SESSION['status_code'] = "error";
+            $_SESSION['message'] = "Request didn't update to completed.";
+            header("location:../admin/application.php");
+        } 
+
+        else if($result == TRUE){
+            $_SESSION['status'] = "Request Completed successfully.";
+            $_SESSION['status_code'] = "success";
+            $_SESSION['message'] = "Completed successful.";
             header("location:../admin/application.php");
 
         }
-    }
 }
 
 
@@ -605,7 +695,6 @@ if (isset($_POST['declinerequest'])) {
             $_SESSION['status'] = "Fail to decline.";
             $_SESSION['status_code'] = "error";
             $_SESSION['message'] = "Request didn't decline.";
-            header("location:../admin/application.php");
 
 
         } 
@@ -613,9 +702,12 @@ if (isset($_POST['declinerequest'])) {
             $_SESSION['status'] = "Request Declined successfully.";
             $_SESSION['status_code'] = "success";
             $_SESSION['message'] = "Declined successful.";
-            header("location:../admin/application.php");
 
         }
+
+        $location = mysqli_real_escape_string($conn, $_POST['location']) ? mysqli_real_escape_string($conn, $_POST['location'])  : mysqli_real_escape_string($conn, $_POST['location2'])  ;
+        header("location:../admin/$location");
+        // echo $location;
     }
 }
 
@@ -664,20 +756,41 @@ if(isset($_POST['newrequest'])){
     $ref = uniqid(12);
 
 
-    $sql = "INSERT INTO forms (`form_id`, `ref` , `formtype`, `purpose`, `fname`, `mname`, `lname` , `bdate`, `age`, `address`, `user`, `status`, `created_at`, `updated_at`) VALUES (NULL, '$ref' ,'$formtype' , '$purpose' , '$fname' , '$mname' , '$lname' , '$bdate' , '$age', '$address', '$user' , '$status',  now(), now())";
-    $result = mysqli_query($conn, $sql);
 
-    if ($result != TRUE) {
-        $_SESSION['status'] = "Adding Failed.";
-        $_SESSION['status_code'] = "error";
-        $_SESSION['message'] = "Fail to apply request.";
-        header("location:../resident/forms.php");
-    } else {
-        $_SESSION['status'] = "Request completed successfully.";
-        $_SESSION['status_code'] = "success";
-        $_SESSION['message'] = "Request was successful.";
-        header("Location: ../resident/forms.php");
+
+    
+    $fullname = $fname.' '.$mname.' '.$lname;
+
+    $checkblotter = "SELECT * FROM `blotters` WHERE `defendant_name` LIKE '%$fullname%'";
+    $tama = mysqli_query($conn, $checkblotter);
+
+    if (mysqli_num_rows($tama) > 0) {
+            $_SESSION['status'] = "Blotter Record Dectected.";
+            $_SESSION['status_code'] = "error";
+            $_SESSION['message'] = "Your name has a blotter record in our database.";
+            header("location:../resident/forms.php");
+   
     }
+    else {
+
+
+        $sql = "INSERT INTO forms (`form_id`, `ref` , `formtype`, `purpose`, `fname`, `mname`, `lname` , `bdate`, `age`, `address`, `user`, `status`, `created_at`, `updated_at`) VALUES (NULL, '$ref' ,'$formtype' , '$purpose' , '$fname' , '$mname' , '$lname' , '$bdate' , '$age', '$address', '$user' , '$status',  now(), now())";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result != TRUE) {
+            $_SESSION['status'] = "Adding Failed.";
+            $_SESSION['status_code'] = "error";
+            $_SESSION['message'] = "Fail to apply request.";
+            header("location:../resident/forms.php");
+        } else {
+            $_SESSION['status'] = "Request completed successfully. $fullname ";
+            $_SESSION['status_code'] = "success";
+            $_SESSION['message'] = "Request was successful.";
+            header("Location: ../resident/forms.php");
+        }
+
+    }
+ 
 }
 
 
@@ -777,6 +890,7 @@ if(isset($_POST['deletemessage'])){
 if (isset($_POST['feedbackbtn'])) {
     // Sanitize input
     $msg = mysqli_real_escape_string($conn, $_POST['feedback']);
+    $location = mysqli_real_escape_string($conn, $_POST['location']);
     $user_id = $_SESSION['user_id'];
 
     // Correct the variable name and fix the SQL syntax
@@ -794,7 +908,7 @@ if (isset($_POST['feedbackbtn'])) {
         $_SESSION['message'] = "Failed to send your message.";
     }
 
-    header("location:../resident/forum.php");
+    header("location:../resident/$location");
 }
 
 
@@ -803,6 +917,18 @@ if (isset($_POST['feedbackbtn'])) {
 // New Message
 if (isset($_POST['svprofile'])) {
 
+    if($_POST['fileInput'] === NULL){
+        if ($_SESSION['user_id'] == 1) {
+            $location = '../admin/account.php';
+        } else {
+            $location = '../resident/feedback.php';
+        }
+
+        header("Location: " . $location);
+    }
+    else{
+
+   
     $user_id = $_SESSION['user_id'];
 
     $check_sql = "SELECT * FROM user WHERE `user_id` = '$user_id'";
@@ -818,7 +944,7 @@ if (isset($_POST['svprofile'])) {
                 $sql = "UPDATE `user` SET `profile` = '$profile' , `updated_at` = now() WHERE `user_id` = $user_id";
                 $result = mysqli_query($conn, $sql);
 
-    // Execute the query
+                // Execute the query
                 if (mysqli_query($conn, $sql)) {
                     $_SESSION['status'] = "Profile Updated.";
                     $_SESSION['status_code'] = "success";
@@ -839,6 +965,8 @@ if (isset($_POST['svprofile'])) {
 
             }
         }
+    }
+
     }
 }
 

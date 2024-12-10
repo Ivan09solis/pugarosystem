@@ -59,13 +59,17 @@ $announcement = mysqli_query($conn, $sql);
 }
 
 body {
-            background-image: url('../includes/logo/bg1.png');
-            background-size: cover;      
-            background-position: center;  
-            background-repeat: no-repeat; 
-            height: 100vh;               
-            margin: 0;                
-        }
+    position: relative;
+    margin: 0;
+    height: 100%; 
+    overflow-x: hidden; 
+    background-image: url('../includes/logo/bg1.png');
+    background-size: cover;    
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+
+}
 
 
 </style>
@@ -177,6 +181,26 @@ body {
 
 
         <script>
+
+        <?php
+            if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
+                ?>
+                Swal.fire({
+                    toast: true, 
+                    position: 'top-end', 
+                    icon: "<?php echo $_SESSION['status_code'] ?>",
+                    title: "<?php echo $_SESSION['status'] ?>",
+                    text: "<?php echo $_SESSION['message'] ?>",
+                    showConfirmButton: false, 
+                    timer: 3000, 
+                    timerProgressBar: true, 
+                });
+                <?php
+                unset($_SESSION['status']);
+            }
+            ?>
+
+
             function deleteR(id) {
                 Swal.fire({
                     title: 'Are you sure?',
