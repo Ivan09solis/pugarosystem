@@ -10,9 +10,9 @@
     $_SESSION['modalshow'] = false;
     require_once('../sendmail.php');
 
+
     if (isset($_POST['register'])) {
 
-     
 
         $password = md5($_POST['password']);
         $conf_password = md5($_POST['confpassword']);
@@ -23,8 +23,6 @@
             $_SESSION['status_code'] = "error";
             $_SESSION['message'] = "Please try again your password".
             $float = true;
-
-            echo "dito sa comparepassword";
         
         } 
 
@@ -48,8 +46,9 @@
         $_SESSION['regemail'] = $email;
 
 
+
         // GENERATE OTP NUMBER
-        $vkey = mt_rand(100000, 999999);
+        $vkey = mt_rand(100000, 999999); 
         $_SESSION['vkey'] = $vkey;
 
 
@@ -90,23 +89,22 @@
                 $_SESSION['message'] = "This email already exist and verified.";
                 $float = true;
 
-                echo "dito sa email check";
-
             } 
             //  SEND OTP THROUGH EMAIL
             else {
                 
                 // INSERT TO DATABASE USER CREDENTIAL
-                $sql1 = "INSERT INTO user(`user_id`,`password`,`fname`,`mname`, `lname`, `gender`, `bdate`, `contact`, `email`,`vkey`,`profile`,`Is4ps`) VALUES (NULL, '$password','$firstname', '$middlename', '$lastname', '$gender', '$birthdate', '$contact', '$email', '$vkey', '$profile','$Is4ps')";
+                $sql1 = "INSERT INTO user (`user_id`,`password`,`fname`,`mname`, `lname`, `gender`, `bdate`, `contact`, `email`,`vkey`,`profile`,`Is4ps`) VALUES (NULL, '$password','$firstname', '$middlename', '$lastname', '$gender', '$birthdate', '$contact', '$email', '$vkey', '$profile','$Is4ps')";
                 $run = mysqli_query($conn, $sql1);
 
+                
                 if ($run) {
                     $_SESSION['modalshow'] = true; // SESSION FOR MODAL MODAL
                     $success = "Your code was sent to you via email " . $email . "";
                     $_SESSION['verefymessage'] = $success;
 
 
-                    $a = "Pugaro Management System";
+                    $a = "Pugaro Management System"; 
                     $b = "<html><body><p>Hi mam/sir $firstname $middlename $lastname. Good day! Thanks for registering your account in Pugaro Management. Your OTP code is $vkey </a></p></body></html>";
                     $c = $email;
                     $d = $firstname . " " . $middlename . " " . $lastname;
@@ -474,8 +472,7 @@ function myFunction() {
     <div class="modal modal-fade" id="otpmodal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="deleteEventLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                    <h1 class="modal-title fw-bold p-4 fs-5" id="deleteEventLabel">OTP VERIFICATION
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button></h1>
+                    <h1 class="modal-title fw-bold p-4 fs-5" id="deleteEventLabel">OTP VERIFICATION</h1>
                     <div class="modal-body">
                         <div class="row justify-content-center">
                             <div class="col-12 col-md-6 col-lg-4" style="min-width: 500px;">

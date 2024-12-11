@@ -45,7 +45,7 @@ body {
 <div class="navbar shadow rounded">
     <div class="navbar-title">
 
-        <h2 class="title fw-bold p-3"> <button class="openbtn border-0" onclick="toggleSidebar()">☰</button>
+        <h2 class="title fw-bold p-3">
         My Account</h3>
         </div>
         <div class="navbar-info">

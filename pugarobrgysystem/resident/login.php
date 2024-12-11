@@ -8,7 +8,7 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = md5($_POST['password']);
     $captcha = $_POST['captcha'];
-    $generatedCaptcha = $_POST['generated-captcha'];
+    $generatedCaptcha = $_POST['generated-captcha']; 
 
     if ($captcha !== $generatedCaptcha) {
         $message = 'CAPTCHA verification failed. Please try again.';

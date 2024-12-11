@@ -91,7 +91,7 @@ $request = mysqli_query($conn, $sql);
                     <div class="row">
                         <div class="col">
                             <div class="display-4">
-                                <?= $count_residents ?> 
+                                <?= $count_blotters ?> 
                             </div>
                         </div>
                     </div>

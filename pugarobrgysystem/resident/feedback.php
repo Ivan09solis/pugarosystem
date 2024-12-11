@@ -125,10 +125,7 @@ $user = mysqli_query($conn, $sql);
                                 <input class="form-control p-3 mb-4" type="date" name="bdate" id="bdate" value="<?= $row['bdate'];?>">
                             </div>
 
-                            <div class="col-md-12">
-                                <label>Address</label>
-                                <input class="form-control p-3 mb-4" placeholder="Enter your Address" type="text" name="address" id="address" value="<?= $row['address'];?>">
-                            </div>
+
 
                             <div class="col-md-6">
                                 <label>Phone #</label>
@@ -227,6 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
    document.getElementById('fileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
 
+
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -236,9 +234,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-   document.getElementById('updateProfileBtn').addEventListener('click', function() {
-      alert('Profile updated!');
-  });
 });
 
 </script>

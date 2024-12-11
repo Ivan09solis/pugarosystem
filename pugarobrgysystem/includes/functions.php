@@ -27,7 +27,7 @@ if (isset($_POST['addresident'])) {
         // Name already exists
         $_SESSION['status'] = "Adding Failed.";
         $_SESSION['status_code'] = "error";
-        $_SESSION['message'] = "Name already exists.";
+        $_SESSION['message'] = "Record already exists.";
         header("location:../admin/resident.php");
     } else {
         $sql = "INSERT INTO resident (`id`, `name`,`voterid`, `bdate`, `civilstatus`, `religion`, `gender`, `address`,`pwd`,`senior_citizen`,`4ps`,`voter`,  `created_at`, `updated_at`) VALUES (NULL, '$name', '$voterid', '$bdate', '$civilstatus', '$religion', '$gender', '$address', '$pwd', '$senior_citizen', '$welfare','$voter', now(), now())";
@@ -917,16 +917,7 @@ if (isset($_POST['feedbackbtn'])) {
 // New Message
 if (isset($_POST['svprofile'])) {
 
-    if($_POST['fileInput'] === NULL){
-        if ($_SESSION['user_id'] == 1) {
-            $location = '../admin/account.php';
-        } else {
-            $location = '../resident/feedback.php';
-        }
 
-        header("Location: " . $location);
-    }
-    else{
 
    
     $user_id = $_SESSION['user_id'];
@@ -967,7 +958,6 @@ if (isset($_POST['svprofile'])) {
         }
     }
 
-    }
 }
 
 

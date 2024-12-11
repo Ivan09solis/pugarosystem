@@ -155,7 +155,7 @@ if (mysqli_num_rows($result) > 0) {
                                 <!-- Fullname -->
                                 <div class="col-md-6 col-sm-6 col-6">
                                     <div class="label h6 mt-2">Fullname</div>
-                                    <input type="text" name="name" class="form-control mb-3" value="<?php echo $row['name'] ?>" placeholder="Enter Name" required>
+                                    <input type="text" name="name" class="form-control mb-3" value="<?php echo $row['name'] ?>" placeholder="Enter Name" >
                                 </div>
 
                                 <div class="col-md-6 col-sm-6 col-6">
@@ -207,7 +207,7 @@ if (mysqli_num_rows($result) > 0) {
                                     <select name="4ps" class="form-select mb-3" required>
                                         <option value="">Select--</option>
                                         <option value="Non-beneficiary" <?php if ($row['4ps'] == 'Non-beneficiary') echo 'selected'; ?>>Non-beneficiary</option>
-                                        <option value="4Ps" <?php if ($row['4ps'] == '4Ps') echo 'selected'; ?>>4Ps</option>
+                                        <option value="4P'S" <?php if ($row['4ps'] == "4P'S") echo 'selected'; ?>>4Ps</option>
                                         <option value="Tupad" <?php if ($row['4ps'] == 'Tupad') echo 'selected'; ?>>Tupad</option>
                                     </select>
                                 </div>
@@ -244,13 +244,13 @@ if (mysqli_num_rows($result) > 0) {
                                     <div class="label h6 mt-2">Zone</div>
                                     <select name="address" id="" class="form-select mb-3" required>
                                         <option value="">Select--</option>
-                                        <option value="Zone 1"<?php if ($row['address'] == 'Zone 1') echo 'selected'; ?>>Zone 1</option>
-                                        <option value="Zone 2"<?php if ($row['address'] == 'Zone 2') echo 'selected'; ?>>Zone 2</option>
-                                        <option value="Zone 3"<?php if ($row['address'] == 'Zone 3') echo 'selected'; ?>>Zone 3</option>
-                                        <option value="Zone 4"<?php if ($row['address'] == 'Zone 4') echo 'selected'; ?>>Zone 4</option>
-                                        <option value="Zone 5"<?php if ($row['address'] == 'Zone 5') echo 'selected'; ?>>Zone 5</option>
-                                        <option value="Zone 6"<?php if ($row['address'] == 'Zone 6') echo 'selected'; ?>>Zone 6</option>
-                                        <option value="Zone 7"<?php if ($row['address'] == 'Zone 7') echo 'selected'; ?>>Zone 7</option>
+                                        <option value="Zone-1"<?php if ($row['address'] == 'Zone-1') echo 'selected'; ?>>Zone 1</option>
+                                        <option value="Zone-2"<?php if ($row['address'] == 'Zone-2') echo 'selected'; ?>>Zone 2</option>
+                                        <option value="Zone-3"<?php if ($row['address'] == 'Zone-3') echo 'selected'; ?>>Zone 3</option>
+                                        <option value="Zone-4"<?php if ($row['address'] == 'Zone-4') echo 'selected'; ?>>Zone 4</option>
+                                        <option value="Zone-5"<?php if ($row['address'] == 'Zone-5') echo 'selected'; ?>>Zone 5</option>
+                                        <option value="Zone-6"<?php if ($row['address'] == 'Zone-6') echo 'selected'; ?>>Zone 6</option>
+                                        <option value="Zone-7"<?php if ($row['address'] == 'Zone-7') echo 'selected'; ?>>Zone 7</option>
                                     </select>
                              </div>
                             </div>
@@ -295,7 +295,7 @@ if (mysqli_num_rows($result) > 0) {
 
                             <div class="col-md-6 col-sm-6 col-6">
                                 <div class="label h6 mt-2">Voter's ID</div>
-                                <input type="number" id="voterid" name="voterid" class="form-control mb-3" placeholder="12 Digits" required oninput="limitVoterIdLength(this)" />
+                                <input type="number" id="voterid" name="voterid" class="form-control mb-3" placeholder="12 Digits" oninput="limitVoterIdLength(this)" />
                             </div>
                         
                             <div class="col-md-6 col-sm-6 col-6">
@@ -378,13 +378,13 @@ if (mysqli_num_rows($result) > 0) {
                                 <div class="label h6 mt-2">Zone</div>
                                 <select name="address" id="" class="form-select mb-3" required>
                                     <option value="">Select--</option>
-                                    <option value="Zone 1">Zone 1</option>
-                                    <option value="Zone 2">Zone 2</option>
-                                    <option value="Zone 3">Zone 3</option>
-                                    <option value="Zone 4">Zone 4</option>
-                                    <option value="Zone 5">Zone 5</option>
-                                    <option value="Zone 6">Zone 6</option>
-                                    <option value="Zone 7">Zone 7</option>
+                                    <option value="Zone-1">Zone 1</option>
+                                    <option value="Zone-2">Zone 2</option>
+                                    <option value="Zone-3">Zone 3</option>
+                                    <option value="Zone-4">Zone 4</option>
+                                    <option value="Zone-5">Zone 5</option>
+                                    <option value="Zone-6">Zone 6</option>
+                                    <option value="Zone-7">Zone 7</option>
                                 </select>
                             </div>
 
